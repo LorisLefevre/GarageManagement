@@ -1,16 +1,24 @@
 package Vue.InterfacesGraphiques;
 
+import Contrôleur.ActionsControleur;
+import Contrôleur.Controleur;
+import Modèle.ClassesMetier.*;
+import Modèle.GestionDeDonnees.Garage;
+import Vue.Vues.VueGarageWindow;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GarageWindow extends JFrame {
+public class GarageWindow extends JFrame implements VueGarageWindow
+{
     private DefaultTableModel model;
     private List<Object[]> data; // Pour stocker les données initiales
 
@@ -28,6 +36,7 @@ public class GarageWindow extends JFrame {
 
     private static final String FICHIER_VEHICULES = "Vehicles.txt"; // Chemin vers le fichier
 
+    private Garage garage;
     private static GarageWindow instance;
     public static GarageWindow getGarageWindow()
     {
@@ -38,10 +47,15 @@ public class GarageWindow extends JFrame {
         return instance;
     }
 
+    private JButton Ajouter;
+    private JButton Modifier;
+    private JButton Supprimer;
+    private JButton Voir;
+
 
     public GarageWindow()
     {
-        setTitle("Test");
+        setTitle("Garage Window");
         setSize(900, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -58,12 +72,15 @@ public class GarageWindow extends JFrame {
         userLabel.setFont(new Font("Arial", Font.BOLD, 14));
         topPanel.add(userLabel);
 
-        // Boutons d'actions
-        String[] buttonNames = {"Ajouter", "Modifier", "Supprimer", "Voir", "Logout"};
-        for (String name : buttonNames) {
-            JButton button = new JButton(name);
-            topPanel.add(button);
-        }
+        Ajouter = new JButton("Ajouter");
+        Modifier = new JButton("Modifier");
+        Supprimer = new JButton("Supprimer");
+        Voir = new JButton("Voir");
+
+        topPanel.add(Ajouter);
+        topPanel.add(Modifier);
+        topPanel.add(Supprimer);
+        topPanel.add(Voir);
 
         // Ajout du comboBox pour le tri par type de véhicule
         JComboBox<String> sortComboBox = new JComboBox<>(new String[]{"Tout", "Voiture", "Moto", "Camionnette", "Camion"});
@@ -99,15 +116,15 @@ public class GarageWindow extends JFrame {
         bottomPanel.add(messageLabel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
     }
-
-    // Méthode pour lire les données depuis le fichier Vehicles.txt
-    private void lireDonneesDepuisFichier() {
-        try {
-            // Appel de la méthode lireFichier() pour obtenir toutes les lignes du fichier
-            List<String> lignes = lireFichier();
+    private void lireDonneesDepuisFichier()
+    {
+        try
+        {
+            List<String> lignes = Garage.getGarage().lireFichier();
 
             // Parcourir chaque ligne et extraire les données
-            for (String ligne : lignes) {
+            for (String ligne : lignes)
+            {
                 String[] elements = ligne.split(",");
                 if (elements.length >= 8) {
                     String type = elements[0];
@@ -121,13 +138,16 @@ public class GarageWindow extends JFrame {
                     data.add(new Object[]{type, marque, modele, puissance, transmission, pays, annee, getScaledImage(cheminImage)});
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
         }
     }
 
     // La méthode lireFichier que vous avez définie
-    public List<String> lireFichier() throws IOException {
+    public List<String> lireFichier() throws IOException
+    {
         File fichier = new File(FICHIER_VEHICULES);
         if (!fichier.exists()) {
             fichier.createNewFile();
@@ -191,11 +211,150 @@ public class GarageWindow extends JFrame {
         }
     }
 
-    public static void main(String[] args)
+    public void  addAjoutListener(ActionListener actionListener)
     {
-        SwingUtilities.invokeLater(() -> {
-            GarageWindow frame = new GarageWindow();
-            frame.setVisible(true);
-        });
+        Ajouter.addActionListener(actionListener);
     }
+
+    public void  addModifierListener(ActionListener actionListener)
+    {
+        Modifier.addActionListener(actionListener);
+    }
+
+    public void  addSupprimerListener(ActionListener actionListener)
+    {
+        Supprimer.addActionListener(actionListener);
+    }
+
+    public void  addVoirListener(ActionListener actionListener)
+    {
+        Voir.addActionListener(actionListener);
+    }
+
+    public void showMessage(String message)
+    {
+        JOptionPane.showMessageDialog(this, message);
+    }
+    @Override
+    public void run()
+    {
+        this.setVisible(true);
+    }
+
+    @Override
+    public void setContrôleur(Controleur controleur)
+    {
+        Ajouter.setActionCommand(ActionsControleur.AJOUTER);
+        Modifier.setActionCommand(ActionsControleur.MODIFIER);
+        Supprimer.setActionCommand(ActionsControleur.SUPPRIMER);
+        Voir.setActionCommand(ActionsControleur.VOIR);
+
+        Ajouter.addActionListener(controleur);
+        Modifier.addActionListener(controleur);
+        Supprimer.addActionListener(controleur);
+        Voir.addActionListener(controleur);
+    }
+
+    public void Ajouter() {
+        showMessage("Ajout de véhicule");
+
+        // Création des champs du formulaire
+        JComboBox<String> typeComboBox = new JComboBox<>(new String[]{"Voiture", "Moto", "Camionnette", "Camion"});
+        JTextField marqueField = new JTextField(10);
+        JTextField modeleField = new JTextField(10);
+        JTextField puissanceField = new JTextField(10);
+        JTextField transmissionField = new JTextField(10);
+        JTextField anneeField = new JTextField(4);
+        JTextField paysField = new JTextField(10);
+        JTextField imagePathField = new JTextField(20);
+        JButton imageButton = new JButton("Choisir Image");
+
+        // Action pour le bouton de sélection d'image
+        imageButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showOpenDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                imagePathField.setText(selectedFile.getAbsolutePath());
+            }
+        });
+
+        // Ajout des champs à un panneau
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        panel.add(new JLabel("Type de véhicule:"));
+        panel.add(typeComboBox);
+        panel.add(new JLabel("Marque:"));
+        panel.add(marqueField);
+        panel.add(new JLabel("Modèle:"));
+        panel.add(modeleField);
+        panel.add(new JLabel("Puissance:"));
+        panel.add(puissanceField);
+        panel.add(new JLabel("Transmission:"));
+        panel.add(transmissionField);
+        panel.add(new JLabel("Année:"));
+        panel.add(anneeField);
+        panel.add(new JLabel("Pays:"));
+        panel.add(paysField);
+        panel.add(new JLabel("Image:"));
+        panel.add(imagePathField);
+        panel.add(imageButton);
+
+        // Afficher le dialogue
+        int result = JOptionPane.showConfirmDialog(null, panel, "Ajouter un véhicule", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        // Traitement de la réponse
+        if (result == JOptionPane.OK_OPTION) {
+            String type = (String) typeComboBox.getSelectedItem();
+            String marque = marqueField.getText();
+            String modele = modeleField.getText();
+            String puissance = puissanceField.getText();
+            String transmission = transmissionField.getText();
+            int annee;
+            try {
+                annee = Integer.parseInt(anneeField.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Veuillez entrer une année valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            String pays = paysField.getText();
+            String imagePath = imagePathField.getText();
+
+            // Vérifier que les champs requis sont remplis
+            if (marque.isEmpty() || modele.isEmpty() || puissance.isEmpty() || transmission.isEmpty() || pays.isEmpty() || imagePath.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Créer et ajouter le véhicule en fonction du type sélectionné
+            Vehicule vehicule;
+            switch (type) {
+                case "Voiture":
+                    vehicule = new Voiture(marque, modele, puissance, transmission, pays, annee, imagePath);
+                    break;
+                case "Moto":
+                    vehicule = new Moto(marque, modele, puissance, transmission, pays, annee, imagePath);
+                    break;
+                case "Camionnette":
+                    vehicule = new Camionnette(marque, modele, puissance, transmission, pays, annee, imagePath);
+                    break;
+                case "Camion":
+                    vehicule = new Camion(marque, modele, puissance, transmission, pays, annee, imagePath);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Type de véhicule non supporté: " + type);
+            }
+
+            try {
+                Garage.getGarage().ajouterVehicule(vehicule);
+                JOptionPane.showMessageDialog(null, "Véhicule ajouté avec succès!", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erreur lors de l'ajout du véhicule: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+
+            lireDonneesDepuisFichier();
+        }
+    }
+
 }

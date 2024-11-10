@@ -59,37 +59,41 @@ public class Controleur implements ActionListener
         if(actionEvent.getActionCommand().equals(ActionsControleur.LOGIN))
         {
             vueLoginWindow.Login();
-            //vueGarageWindow = GarageWindow.getGarageWindow();
+            vueGarageWindow = GarageWindow.getGarageWindow();
+            setControleurGarage(vueGarageWindow);
         }
 
         if(actionEvent.getActionCommand().equals(ActionsControleur.LOGOUT))
         {
-
+            System.out.println("\nDéconnexion de l'utilisateur\n");
+            vueLoginWindow.Logout();
         }
 
         if(actionEvent.getActionCommand().equals(ActionsControleur.AJOUTER))
         {
+            System.out.println("\nAjout d'un nouveau véhicule\n");
+            garageWindow.Ajouter();
 
         }
 
         if(actionEvent.getActionCommand().equals(ActionsControleur.SUPPRIMER))
         {
-
+            System.out.println("\nSupression du véhicule\n");
         }
 
         if(actionEvent.getActionCommand().equals(ActionsControleur.MODIFIER))
         {
-
+            System.out.println("\nModification du véhicule\n");
         }
 
         if(actionEvent.getActionCommand().equals(ActionsControleur.VOIR))
         {
-
+            System.out.println("\nVoir les informations du véhicule\n");
         }
 
         if(actionEvent.getActionCommand().equals(ActionsControleur.TRIER))
         {
-
+            System.out.println("\nTri de véhicules\n");
         }
     }
 }

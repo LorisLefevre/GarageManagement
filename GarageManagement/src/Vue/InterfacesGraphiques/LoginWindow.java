@@ -40,11 +40,17 @@ public class LoginWindow extends JFrame implements VueLoginWindow
         return LoginButton;
     }
 
+    private JButton LogoutButton;
+    public JButton getLogoutButton()
+    {
+        return LogoutButton;
+    }
+
     private JPanel MainPanel;
 
     private static LoginWindow instance;
 
-    public static LoginWindow getLoginWindow()
+    public  LoginWindow getLoginWindow()
     {
         if (instance == null)
         {
@@ -68,12 +74,14 @@ public class LoginWindow extends JFrame implements VueLoginWindow
         UsernameField = new JTextField(20);
         PasswordField = new JPasswordField(20);
         LoginButton = new JButton("Login");
+        LogoutButton = new JButton("Logout");
 
         MainPanel.add(new JLabel("Username:"));
         MainPanel.add(UsernameField);
         MainPanel.add(new JLabel("Password:"));
         MainPanel.add(PasswordField);
         MainPanel.add(LoginButton);
+        MainPanel.add(LogoutButton);
 
         setContentPane(MainPanel);
 
@@ -94,6 +102,11 @@ public class LoginWindow extends JFrame implements VueLoginWindow
         LoginButton.addActionListener(listener);
     }
 
+    public void addLogoutListener(ActionListener listener)
+    {
+        LogoutButton.addActionListener(listener);
+    }
+
     public void showMessage(String message)
     {
         JOptionPane.showMessageDialog(this, message);
@@ -112,6 +125,9 @@ public class LoginWindow extends JFrame implements VueLoginWindow
         this.loginWindow = this;
         LoginButton.setActionCommand(ActionsControleur.LOGIN);
         loginWindow.addLoginListener(controleur);
+
+        LogoutButton.setActionCommand(ActionsControleur.LOGOUT);
+        loginWindow.addLogoutListener(controleur);
     }
 
     @Override
@@ -134,7 +150,6 @@ public class LoginWindow extends JFrame implements VueLoginWindow
             this.garageWindow = GarageWindow.getGarageWindow();
             garageWindow.setUserLabel(Username);
             garageWindow.setVisible(true);
-            LoginButton.setEnabled(false);
         }
 
         else
@@ -143,6 +158,17 @@ public class LoginWindow extends JFrame implements VueLoginWindow
         }
 
         return null;
+    }
+
+    @Override
+    public void Logout()
+    {
+        System.out.println("\nDéconnexion de l'utilisateur\n");
+        loginWindow.getLoginWindow().getUsernameField().setText("");
+        loginWindow.getLoginWindow().getPasswordField().setText("");
+
+        this.garageWindow = GarageWindow.getGarageWindow();
+        garageWindow.setVisible(false);
     }
 
 }

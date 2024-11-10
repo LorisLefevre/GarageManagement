@@ -15,13 +15,14 @@ public class Voiture extends Vehicule
     // Vous pouvez ajouter des méthodes spécifiques à la classe Voiture ici si nécessaire.
     public static void main(String[] args)
     {
-        Voiture voiture1 = new Voiture("Nissan", "GTR", "600 ch", "Automatique", "Japon", 2021, "C:/Users/Loris/NissanGTR.jpg");
+        /*Voiture voiture1 = new Voiture("Nissan", "GTR", "600 ch", "Automatique", "Japon", 2021, "C:/Users/Loris/NissanGTR.jpg");
         Voiture voiture2 = new Voiture("Toyota", "Supra", "335 ch", "Automatique", "Japon", 2021, "C:/Users/Loris/ToyotaSupra.jpg");
-
+        */
+        Voiture voiture = new Voiture("Seat", "Ibiza", "75 ch", "Manuelle", "Espagne", 2016, "C/Users/Loris/SeatIbiza.jpg");
         // Liste de véhicules
         List<Vehicule> vehicules = new ArrayList<>();
-        vehicules.add(voiture1);
-        vehicules.add(voiture2);
+        vehicules.add(voiture);
+        //vehicules.add(voiture2);
 
         // Affichage des véhicules dans la liste
         for (Vehicule vehicule : vehicules)

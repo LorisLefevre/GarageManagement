@@ -8,4 +8,6 @@ public interface VueLoginWindow
     void run();
     void setContrôleur(Controleur contrôleur);
     GestionUtilisateurs Login();
+
+    void Logout();
 }

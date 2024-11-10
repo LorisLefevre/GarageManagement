@@ -12,9 +12,9 @@ public class Garage implements InterfaceGarage
 {
     private static final String FICHIER_VEHICULES = "Vehicles.txt";
 
-    private  Garage instance;
+    private static Garage instance;
 
-    public  Garage getGarage()
+    public static Garage getGarage()
     {
         if(instance == null)
         {
@@ -84,7 +84,8 @@ public class Garage implements InterfaceGarage
     public List<String> lireFichier() throws IOException
     {
         File fichier = new File(FICHIER_VEHICULES);
-        if (!fichier.exists()) {
+        if (!fichier.exists())
+        {
             fichier.createNewFile();
         }
 
@@ -188,10 +189,10 @@ public class Garage implements InterfaceGarage
 
         try
         {
-            Vehicule voiture = new Voiture("Nissan", "GTR", "600 ch", "Automatique", "Japon", 2021, "C:/Users/Loris/NissanGTR.jpg");
+            Vehicule voiture = new Voiture("Suzuki", "Swift", "65 ch", "Manuelle", "Japon", 2006, "C:/Users/Loris/SuzukiSwift.jpg");
 
             // Ajout d'un véhicule
-            //garage.ajouterVehicule(voiture);
+            garage.ajouterVehicule(voiture);
 
             // Suppression d'un véhicule
             //garage.supprimerVehicule("Voiture", "Nissan", "GTR");
