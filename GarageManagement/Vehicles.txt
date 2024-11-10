@@ -1,0 +1,7 @@
+Voiture,Nissan,GTR,650 ch,Automatique,Japon,2022,C:/Users/Loris/NissanGTR.jpg
+Voiture,Dodge,Viper,800,Semi-Automatique,États-Unis,2014,C:/Users/Loris/DodgeViper.jpg
+Moto,Yamaha,R1,200ch, Manuelle,Japon,2019,C:/Users/Loris/YamahaR1.jpg
+Camionnette,Ford,Transit,130 ch,Automatique,États-Unis,2020,C:/Users/Loris/FordTransit.jpg
+Camion,Volvo,FH16,750 ch,Automatique,Suède,2022,C:/Users/Loris/VolvoFH16.jpg
+Voiture,Toyota,Supra,335 ch,Automatique,Japon,2021,C:/Users/Loris/ToyotaSupra.jpg
+

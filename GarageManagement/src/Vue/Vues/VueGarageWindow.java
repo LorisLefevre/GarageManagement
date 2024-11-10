@@ -1,4 +1,9 @@
 package Vue.Vues;
 
-public interface VueGarageWindow {
+import Contrôleur.Controleur;
+
+public interface VueGarageWindow
+{
+    void run();
+    void setContrôleur(Controleur contrôleur);
 }

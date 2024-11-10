@@ -7,8 +7,7 @@ import java.util.List;
 
 public class Voiture extends Vehicule
 {
-    // Constructeur de la classe Voiture qui appelle le constructeur de Vehicule
-    public Voiture(String marque, String modele, String puissance, String transmission, String pays, int annee, Image image)
+    public Voiture(String marque, String modele, String puissance, String transmission, String pays, int annee, String image)
     {
         super(marque, modele, puissance, transmission, pays, annee, image, "Voiture"); // Le type est "Voiture"
     }
@@ -16,16 +15,8 @@ public class Voiture extends Vehicule
     // Vous pouvez ajouter des méthodes spécifiques à la classe Voiture ici si nécessaire.
     public static void main(String[] args)
     {
-        // Exemple de création d'images pour les véhicules (utilisez vos chemins d'image ici)
-        ImageIcon imageIcon1 = new ImageIcon("C:/Users/Loris/NissanGTR.jpg");
-        Image image1 = imageIcon1.getImage();
-
-        ImageIcon imageIcon2 = new ImageIcon("C:/Users/Loris/ToyotaSupra.jpg");
-        Image image2 = imageIcon2.getImage();
-
-        // Création des objets Voiture
-        Voiture voiture1 = new Voiture("Nissan", "GTR", "600 ch", "Automatique", "Japon", 2021, image1);
-        Voiture voiture2 = new Voiture("Toyota", "Supra", "335 ch", "Automatique", "Japon", 2021, image2);
+        Voiture voiture1 = new Voiture("Nissan", "GTR", "600 ch", "Automatique", "Japon", 2021, "C:/Users/Loris/NissanGTR.jpg");
+        Voiture voiture2 = new Voiture("Toyota", "Supra", "335 ch", "Automatique", "Japon", 2021, "C:/Users/Loris/ToyotaSupra.jpg");
 
         // Liste de véhicules
         List<Vehicule> vehicules = new ArrayList<>();

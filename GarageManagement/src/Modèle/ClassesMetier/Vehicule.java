@@ -13,11 +13,11 @@ public class Vehicule
     private String transmission;
     private String pays;
     private int annee;
-    private Image image;
+    private String image;
     private String type; // Champ pour définir le type du véhicule
 
     // Constructeur
-    public Vehicule(String marque, String modele, String puissance, String transmission, String pays, int annee, Image image, String type)
+    public Vehicule(String marque, String modele, String puissance, String transmission, String pays, int annee, String image, String type)
     {
         this.marque = marque;
         this.modele = modele;
@@ -48,8 +48,8 @@ public class Vehicule
     public int getAnnee() { return annee; }
     public void setAnnee(int annee) { this.annee = annee; }
 
-    public Image getImage() { return image; }
-    public void setImage(Image image) { this.image = image; }
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
 
     public String getType() { return type; } // Getter pour le type
     public void setType(String type) { this.type = type; } // Setter pour le type
@@ -84,11 +84,11 @@ public class Vehicule
     public static void main(String[] args)
     {
         // Exemple de création des véhicules
-        Voiture voiture1 = new Voiture("Nissan", "GTR", "600 ch", "Automatique", "Japon", 2021, null);
-        Voiture voiture2 = new Voiture("Toyota", "Supra", "335 ch", "Automatique", "Japon", 2021, null);
-        Moto moto1 = new Moto("Yamaha", "R1", "200 ch", "Manuelle", "Japon", 2019, null);
-        Camionnette camionnette1 = new Camionnette("Ford", "Transit", "130 ch", "Automatique", "États-Unis", 2020, null);
-        Camion camion1 = new Camion("Volvo", "FH16", "750 ch", "Automatique", "Suède", 2022, null);
+        Voiture voiture1 = new Voiture("Nissan", "GTR", "600 ch", "Automatique", "Japon", 2021, "null");
+        Voiture voiture2 = new Voiture("Toyota", "Supra", "335 ch", "Automatique", "Japon", 2021, "null");
+        Moto moto1 = new Moto("Yamaha", "R1", "200 ch", "Manuelle", "Japon", 2019, "null");
+        Camionnette camionnette1 = new Camionnette("Ford", "Transit", "130 ch", "Automatique", "États-Unis", 2020, "null");
+        Camion camion1 = new Camion("Volvo", "FH16", "750 ch", "Automatique", "Suède", 2022, "null");
 
         // Création de la liste de véhicules
         List<Vehicule> vehicules = new ArrayList<>();

@@ -5,7 +5,7 @@ import java.awt.Image;
 public class Moto extends Vehicule
 {
     // Constructeur de la classe Moto qui appelle le constructeur de Vehicule
-    public Moto(String marque, String modele, String puissance, String transmission, String pays, int annee, Image image)
+    public Moto(String marque, String modele, String puissance, String transmission, String pays, int annee, String image)
     {
         super(marque, modele, puissance, transmission, pays, annee, image, "Moto"); // Le type est "Moto"
     }
