@@ -2,16 +2,15 @@ package Vue.InterfacesGraphiques;
 
 import Contrôleur.ActionsControleur;
 import Contrôleur.Controleur;
-import Modèle.ClassesMetier.*;
 import Modèle.GestionDeDonnees.Garage;
-import Vue.MéthodesBoutonsGarage.MéthodeBoutonGarageWindow;
+import Vue.MéthodesGarageWindow.MéthodesBoutonsGarageWindow;
+import Vue.MéthodesGarageWindow.MéthodesGarageWindow;
 import Vue.Vues.VueGarageWindow;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -21,7 +20,24 @@ import java.util.List;
 public class GarageWindow extends JFrame implements VueGarageWindow
 {
     private DefaultTableModel model;
+
+    public DefaultTableModel getModel()
+    {
+        return model;
+    }
     private List<Object[]> data;
+
+    public List<Object[]> getData()
+    {
+        return data;
+    }
+
+    private JTable table;
+
+    public JTable getTable()
+    {
+        return table;
+    }
 
     private JLabel userLabel;
 
@@ -35,17 +51,32 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         userLabel.setText("Utilisateur : " + user);
     }
 
+    private JLabel messageLabel;
+
+    public JLabel getMessageLabel()
+    {
+        return messageLabel;
+    }
+
+    public void setMessageLabel(String message)
+    {
+        messageLabel.setText("");
+    }
+
     private static final String FICHIER_VEHICULES = "Vehicles.txt"; // Chemin vers le fichier
 
     private Garage garage;
+    private MéthodesBoutonsGarageWindow méthodeBoutonGarageWindow;
 
-    private MéthodeBoutonGarageWindow méthodeBoutonGarageWindow;
+    private MéthodesGarageWindow méthodesGarageWindow;
     private static GarageWindow instance;
     public static GarageWindow getGarageWindow()
     {
         if(instance == null)
         {
             instance = new GarageWindow();
+            MéthodesGarageWindow.getInstance().lireDonneesDepuisFichier();
+            MéthodesGarageWindow.getInstance().loadTableData("Tout");
         }
         return instance;
     }
@@ -55,6 +86,11 @@ public class GarageWindow extends JFrame implements VueGarageWindow
     private JButton Supprimer;
     private JButton Voir;
 
+    private JComboBox<String> Trier;
+    public JComboBox<String> getTrier()
+    {
+        return Trier;
+    }
 
     public GarageWindow()
     {
@@ -63,11 +99,8 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Initialiser la liste de données
         data = new ArrayList<>();
-        lireDonneesDepuisFichier(); // Charger les données depuis le fichier
 
-        // Création du panneau supérieur pour les boutons et l'utilisateur
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         // Étiquette utilisateur
@@ -79,116 +112,45 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         Modifier = new JButton("Modifier");
         Supprimer = new JButton("Supprimer");
         Voir = new JButton("Voir");
+        Trier = new JComboBox<>(new String[]{"Tout", "Voiture", "Moto", "Camionnette", "Camion"});
 
         topPanel.add(Ajouter);
         topPanel.add(Modifier);
         topPanel.add(Supprimer);
         topPanel.add(Voir);
-
-        // Ajout du comboBox pour le tri par type de véhicule
-        JComboBox<String> sortComboBox = new JComboBox<>(new String[]{"Tout", "Voiture", "Moto", "Camionnette", "Camion"});
-        sortComboBox.addActionListener(e -> {
-            String selectedType = (String) sortComboBox.getSelectedItem();
-            filterTableByType(selectedType);
-        });
-        topPanel.add(new JLabel(" Trier par :"));
-        topPanel.add(sortComboBox);
+        topPanel.add(new JLabel("Trier par : "));
+        topPanel.add(Trier);
 
         add(topPanel, BorderLayout.NORTH);
 
-        // Définition des colonnes
         String[] columnNames = {"Type", "Marque", "Modèle", "Puissance", "Transmission", "Pays", "Année", "Image"};
         model = new DefaultTableModel(columnNames, 0);
 
-        // Création de la JTable avec le modèle
-        JTable table = new JTable(model);
-        loadTableData("Tout"); // Charger toutes les données initiales
+        table = new JTable(model);
 
-        // Personnaliser le rendu pour afficher les images dans la JTable
         table.getColumn("Image").setCellRenderer(new ImageRenderer());
 
-        // Ajouter la table dans un JScrollPane pour activer le défilement
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Panneau inférieur pour les messages de succès ou d’erreurs
         JPanel bottomPanel = new JPanel(new BorderLayout());
-        JLabel messageLabel = new JLabel("Données de véhicules affichées avec succès");
+        messageLabel = new JLabel("Données de véhicules affichées avec succès");
         messageLabel.setFont(new Font("Arial", Font.ITALIC, 12));
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         bottomPanel.add(messageLabel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
     }
-    private void lireDonneesDepuisFichier()
-    {
-        try
-        {
-            List<String> lignes = Garage.getGarage().lireFichier();
-
-            // Parcourir chaque ligne et extraire les données
-            for (String ligne : lignes)
-            {
-                String[] elements = ligne.split(",");
-                if (elements.length >= 8) {
-                    String type = elements[0];
-                    String marque = elements[1];
-                    String modele = elements[2];
-                    String puissance = elements[3];
-                    String transmission = elements[4];
-                    String pays = elements[5];
-                    String annee = elements[6];
-                    String cheminImage = elements[7];
-                    data.add(new Object[]{type, marque, modele, puissance, transmission, pays, annee, getScaledImage(cheminImage)});
-                }
-            }
-        }
-        catch (IOException e)
-        {
-            System.out.println("Erreur lors de la lecture du fichier : " + e.getMessage());
-        }
-    }
-
-    private void loadTableData(String type)
-    {
-        model.setRowCount(0);
-
-        for (Object[] row : data) {
-            if (type.equals("Tout") || row[0].equals(type))
-            {
-                model.addRow(row);
-            }
-        }
-    }
-
-    private void filterTableByType(String type)
-    {
-        loadTableData(type);
-    }
-
-    private ImageIcon getScaledImage(String path)
-    {
-        try
-        {
-            BufferedImage img = ImageIO.read(new File(path));
-            Image scaledImage = img.getScaledInstance(200, 60, Image.SCALE_SMOOTH); // Redimensionner l'image
-            return new ImageIcon(scaledImage);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     static class ImageRenderer extends JLabel implements TableCellRenderer
     {
-        public ImageRenderer() {
+        public ImageRenderer()
+        {
             setHorizontalAlignment(JLabel.CENTER);
         }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                       boolean hasFocus, int row, int column) {
+                                                       boolean hasFocus, int row, int column)
+        {
             if (value instanceof ImageIcon)
             {
                 setIcon((ImageIcon) value);
@@ -200,27 +162,6 @@ public class GarageWindow extends JFrame implements VueGarageWindow
             return this;
         }
     }
-
-    public void  addAjoutListener(ActionListener actionListener)
-    {
-        Ajouter.addActionListener(actionListener);
-    }
-
-    public void  addModifierListener(ActionListener actionListener)
-    {
-        Modifier.addActionListener(actionListener);
-    }
-
-    public void  addSupprimerListener(ActionListener actionListener)
-    {
-        Supprimer.addActionListener(actionListener);
-    }
-
-    public void  addVoirListener(ActionListener actionListener)
-    {
-        Voir.addActionListener(actionListener);
-    }
-
     public void showMessage(String message)
     {
         JOptionPane.showMessageDialog(this, message);
@@ -230,7 +171,6 @@ public class GarageWindow extends JFrame implements VueGarageWindow
     {
         this.setVisible(true);
     }
-
     @Override
     public void setContrôleur(Controleur controleur)
     {
@@ -238,17 +178,30 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         Modifier.setActionCommand(ActionsControleur.MODIFIER);
         Supprimer.setActionCommand(ActionsControleur.SUPPRIMER);
         Voir.setActionCommand(ActionsControleur.VOIR);
+        Trier.setActionCommand(ActionsControleur.TRIER);
 
         Ajouter.addActionListener(controleur);
         Modifier.addActionListener(controleur);
         Supprimer.addActionListener(controleur);
         Voir.addActionListener(controleur);
+        Trier.addActionListener(controleur);
     }
 
     public void Ajouter()
     {
         showMessage("Ajout de véhicule");
-        MéthodeBoutonGarageWindow.getInstance().BoutonAjouter();
+        MéthodesBoutonsGarageWindow.getInstance().BoutonAjouter();
     }
 
+    public void Modifier()
+    {
+        showMessage("Modification d'un véhicule");
+        MéthodesBoutonsGarageWindow.getInstance().BoutonModifier();
+    }
+
+    public void Trier()
+    {
+        showMessage("Tri de véhicules par type");
+        MéthodesBoutonsGarageWindow.getInstance().BoutonTrier();
+    }
 }

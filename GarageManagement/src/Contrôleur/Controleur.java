@@ -84,6 +84,7 @@ public class Controleur implements ActionListener
         if(actionEvent.getActionCommand().equals(ActionsControleur.MODIFIER))
         {
             System.out.println("\nModification du véhicule\n");
+            garageWindow.Modifier();
         }
 
         if(actionEvent.getActionCommand().equals(ActionsControleur.VOIR))
@@ -94,6 +95,7 @@ public class Controleur implements ActionListener
         if(actionEvent.getActionCommand().equals(ActionsControleur.TRIER))
         {
             System.out.println("\nTri de véhicules\n");
+            garageWindow.Trier();
         }
     }
 }
