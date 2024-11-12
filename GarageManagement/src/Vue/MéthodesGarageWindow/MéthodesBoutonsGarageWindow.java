@@ -4,14 +4,10 @@ import Modèle.ClassesMetier.*;
 import Modèle.GestionDeDonnees.Garage;
 import Vue.InterfacesGraphiques.GarageWindow;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+
 
 public class MéthodesBoutonsGarageWindow
 {
@@ -131,13 +127,14 @@ public class MéthodesBoutonsGarageWindow
         }
     }
 
-    public void BoutonModifier()
+    public void BoutonSupprimer()
     {
         int selectedRow = GarageWindow.getGarageWindow().getTable().getSelectedRow();
 
         // Vérifier si une ligne est sélectionnée
-        if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(null, "Veuillez sélectionner un véhicule à modifier.", "Erreur", JOptionPane.ERROR_MESSAGE);
+        if (selectedRow == -1)
+        {
+            JOptionPane.showMessageDialog(null, "Veuillez sélectionner un véhicule à supprimer.", "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -151,108 +148,118 @@ public class MéthodesBoutonsGarageWindow
         int annee = Integer.parseInt((String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 6));
         String imagePath = "";
 
-        // Créer les champs avec les valeurs actuelles
-        JComboBox<String> typeComboBox = new JComboBox<>(new String[]{"Voiture", "Moto", "Camionnette", "Camion"});
+        Vehicule vehiculeSupprime;
+        switch (type)
+        {
+            case "Voiture":
+                vehiculeSupprime = new Voiture(marque, modele, puissance, transmission, pays, annee, imagePath);
+                break;
+            case "Moto":
+                vehiculeSupprime = new Moto(marque, modele, puissance, transmission, pays, annee, imagePath);
+                break;
+            case "Camionnette":
+                vehiculeSupprime = new Camionnette(marque, modele, puissance, transmission, pays, annee, imagePath);
+                break;
+            case "Camion":
+                vehiculeSupprime = new Camion(marque, modele, puissance, transmission, pays, annee, imagePath);
+                break;
+            default:
+                throw new IllegalArgumentException("Type de véhicule non supporté: " + type);
+        }
+
+        try
+        {
+            Garage.getGarage().supprimerVehicule(type, marque, modele);
+            JOptionPane.showMessageDialog(null, "Véhicule supprimmé avec succès!", "Succès", JOptionPane.INFORMATION_MESSAGE);
+        }
+        catch (IOException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Erreur lors de la suppression du véhicule: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+
+        MéthodesGarageWindow.getInstance().loadTableData("Tout");
+    }
+
+    public void BoutonModifier() {
+        int selectedRow = GarageWindow.getGarageWindow().getTable().getSelectedRow();
+
+        // Vérifier si une ligne est sélectionnée
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(null, "Veuillez sélectionner un véhicule à modifier.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Récupérer les valeurs actuelles du véhicule sélectionné
+        String type = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 0);
+        String marque = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 1);
+        String modele = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 2);
+
+        Vehicule vehicule = Garage.getGarage().rechercherVehicule(type, marque, modele);
+        if (vehicule == null) {
+            JOptionPane.showMessageDialog(null, "Véhicule non trouvé.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // ComboBox pour modifier le type
+        String[] types = {"Voiture", "Moto", "Camionnette", "Camion"};
+        JComboBox<String> typeComboBox = new JComboBox<>(types);
         typeComboBox.setSelectedItem(type);
-        JTextField marqueField = new JTextField(marque, 10);
-        JTextField modeleField = new JTextField(modele, 10);
-        JTextField puissanceField = new JTextField(puissance, 10);
-        JTextField transmissionField = new JTextField(transmission, 10);
-        JTextField anneeField = new JTextField(String.valueOf(annee), 4);
-        JTextField paysField = new JTextField(pays, 10);
-        JTextField imagePathField = new JTextField(imagePath, 20);
-        JButton imageButton = new JButton("Choisir Image");
 
-        // Action pour le bouton de sélection d'image
-        imageButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            int result = fileChooser.showOpenDialog(null);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile();
-                imagePathField.setText(selectedFile.getAbsolutePath());
-            }
-        });
+        JTextField marqueField = new JTextField(vehicule.getMarque(), 10);
+        JTextField modeleField = new JTextField(vehicule.getModele(), 10);
+        JTextField puissanceField = new JTextField(vehicule.getPuissance(), 10);
+        JTextField transmissionField = new JTextField(vehicule.getTransmission(), 10);
+        JTextField anneeField = new JTextField(String.valueOf(vehicule.getAnnee()), 4);
+        JTextField paysField = new JTextField(vehicule.getPays(), 10);
+        JTextField imagePathField = new JTextField(vehicule.getImage(), 20);
 
-        // Ajouter les champs au panneau
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        panel.add(new JLabel("Type de véhicule:"));
+        panel.add(new JLabel("Type :"));
         panel.add(typeComboBox);
-        panel.add(new JLabel("Marque:"));
+        panel.add(new JLabel("Marque :"));
         panel.add(marqueField);
-        panel.add(new JLabel("Modèle:"));
+        panel.add(new JLabel("Modèle :"));
         panel.add(modeleField);
-        panel.add(new JLabel("Puissance:"));
+        panel.add(new JLabel("Puissance :"));
         panel.add(puissanceField);
-        panel.add(new JLabel("Transmission:"));
+        panel.add(new JLabel("Transmission :"));
         panel.add(transmissionField);
-        panel.add(new JLabel("Année:"));
+        panel.add(new JLabel("Année :"));
         panel.add(anneeField);
-        panel.add(new JLabel("Pays:"));
+        panel.add(new JLabel("Pays :"));
         panel.add(paysField);
-        panel.add(new JLabel("Image:"));
+        panel.add(new JLabel("Image :"));
         panel.add(imagePathField);
-        panel.add(imageButton);
 
-        // Afficher la fenêtre de modification
         int result = JOptionPane.showConfirmDialog(null, panel, "Modifier un véhicule", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            // Récupérer les nouvelles valeurs
-            String newType = (String) typeComboBox.getSelectedItem();
-            String newMarque = marqueField.getText();
-            String newModele = modeleField.getText();
-            String newPuissance = puissanceField.getText();
-            String newTransmission = transmissionField.getText();
-            int newAnnee;
+            vehicule.setType((String) typeComboBox.getSelectedItem());
+            vehicule.setMarque(marqueField.getText());
+            vehicule.setModele(modeleField.getText());
+            vehicule.setPuissance(puissanceField.getText());
+            vehicule.setTransmission(transmissionField.getText());
+
             try {
-                newAnnee = Integer.parseInt(anneeField.getText());
+                vehicule.setAnnee(Integer.parseInt(anneeField.getText()));
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Veuillez entrer une année valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            String newPays = paysField.getText();
-            String newImagePath = imagePathField.getText();
 
-            if (newMarque.isEmpty() || newModele.isEmpty() || newPuissance.isEmpty() || newTransmission.isEmpty() || newPays.isEmpty() || newImagePath.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            vehicule.setPays(paysField.getText());
+            vehicule.setImage(imagePathField.getText());
 
-            Vehicule vehiculeModifie;
-            switch (newType) {
-                case "Voiture":
-                    vehiculeModifie = new Voiture(newMarque, newModele, newPuissance, newTransmission, newPays, newAnnee, newImagePath);
-                    break;
-                case "Moto":
-                    vehiculeModifie = new Moto(newMarque, newModele, newPuissance, newTransmission, newPays, newAnnee, newImagePath);
-                    break;
-                case "Camionnette":
-                    vehiculeModifie = new Camionnette(newMarque, newModele, newPuissance, newTransmission, newPays, newAnnee, newImagePath);
-                    break;
-                case "Camion":
-                    vehiculeModifie = new Camion(newMarque, newModele, newPuissance, newTransmission, newPays, newAnnee, newImagePath);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Type de véhicule non supporté: " + newType);
-            }
-
-            try
-            {
-                Garage.getGarage().modifierVehicule(vehiculeModifie);
+            try {
+                Garage.getGarage().modifierVehicule(type, marque, modele, vehicule);
                 JOptionPane.showMessageDialog(null, "Véhicule modifié avec succès!", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                MéthodesGarageWindow.getInstance().loadTableData("Tout");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Erreur lors de la modification du véhicule : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
-            catch (IOException ex)
-            {
-                JOptionPane.showMessageDialog(null, "Erreur lors de la modification du véhicule: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-            }
-
-            MéthodesGarageWindow.getInstance().loadTableData("Tout");
         }
     }
-
-
     public void BoutonTrier()
     {
         String selectedType = (String) GarageWindow.getGarageWindow().getTrier().getSelectedItem();

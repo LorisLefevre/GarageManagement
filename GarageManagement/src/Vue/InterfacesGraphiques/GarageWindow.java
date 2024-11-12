@@ -11,9 +11,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
-import java.io.*;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,13 +59,7 @@ public class GarageWindow extends JFrame implements VueGarageWindow
     {
         messageLabel.setText("");
     }
-
-    private static final String FICHIER_VEHICULES = "Vehicles.txt"; // Chemin vers le fichier
-
     private Garage garage;
-    private MéthodesBoutonsGarageWindow méthodeBoutonGarageWindow;
-
-    private MéthodesGarageWindow méthodesGarageWindow;
     private static GarageWindow instance;
     public static GarageWindow getGarageWindow()
     {
@@ -191,6 +182,12 @@ public class GarageWindow extends JFrame implements VueGarageWindow
     {
         showMessage("Ajout de véhicule");
         MéthodesBoutonsGarageWindow.getInstance().BoutonAjouter();
+    }
+
+    public void Supprimer()
+    {
+        showMessage("Suppression du véhicule");
+        MéthodesBoutonsGarageWindow.getInstance().BoutonSupprimer();
     }
 
     public void Modifier()

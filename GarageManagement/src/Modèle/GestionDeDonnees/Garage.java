@@ -1,7 +1,6 @@
 package Modèle.GestionDeDonnees;
-
-import Modèle.ClassesMetier.Vehicule;
-import Modèle.ClassesMetier.Voiture;
+import Modèle.ClassesMetier.*;
+import Modèle.GestionDeDonnees.InterfaceGarage;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -11,20 +10,27 @@ import java.util.Scanner;
 public class Garage implements InterfaceGarage
 {
     private static final String FICHIER_VEHICULES = "Vehicles.txt";
-
     private static Garage instance;
+    private List<Vehicule> listeVehicules;  // Déclaration de la liste de véhicules
 
+    // Constructeur privé pour le singleton
+    public Garage() {
+        listeVehicules = new ArrayList<>();  // Initialisation de la liste des véhicules
+    }
+
+    // Méthode pour obtenir l'instance unique du garage
     public static Garage getGarage()
     {
-        if(instance == null)
-        {
+        if (instance == null) {
             instance = new Garage();
         }
         return instance;
     }
+
     @Override
     public void ajouterVehicule(Vehicule vehicule) throws IOException
     {
+        listeVehicules.add(vehicule);  // Ajout du véhicule à la liste
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FICHIER_VEHICULES, true)))
         {
             writer.write(formaterVehicule(vehicule));
@@ -33,8 +39,7 @@ public class Garage implements InterfaceGarage
     }
 
     @Override
-    public void supprimerVehicule(String type, String marque, String modele) throws IOException
-    {
+    public void supprimerVehicule(String type, String marque, String modele) throws IOException {
         List<String> lignes = lireFichier();
         List<String> lignesModifiees = new ArrayList<>();
 
@@ -48,7 +53,7 @@ public class Garage implements InterfaceGarage
         ecrireFichier(lignesModifiees);
     }
 
-    public void modifierVehicule(Vehicule vehicule) throws IOException
+    public void modifierVehicule(String ancienType, String ancienneMarque, String ancienModele, Vehicule vehiculeModifie) throws IOException
     {
         List<String> lignes = lireFichier();
         List<String> lignesModifiees = new ArrayList<>();
@@ -56,10 +61,18 @@ public class Garage implements InterfaceGarage
         for (String ligne : lignes)
         {
             String[] attributs = ligne.split(",");
-            if (attributs.length > 2 && attributs[0].equals(vehicule.getType()) && attributs[1].equals(vehicule.getMarque()) && attributs[2].equals(vehicule.getModele()))
+
+            // On cherche le véhicule avec les anciens attributs
+            if (attributs.length > 2 &&
+                    attributs[0].equalsIgnoreCase(ancienType) &&
+                    attributs[1].equalsIgnoreCase(ancienneMarque) &&
+                    attributs[2].equalsIgnoreCase(ancienModele)) {
+                // Si trouvé, on ajoute le véhicule modifié
+                lignesModifiees.add(formaterVehicule(vehiculeModifie));
+            }
+            else
             {
-                lignesModifiees.add(formaterVehicule(vehicule));
-            } else {
+                // Sinon, on conserve la ligne telle quelle
                 lignesModifiees.add(ligne);
             }
         }
@@ -67,9 +80,9 @@ public class Garage implements InterfaceGarage
         ecrireFichier(lignesModifiees);
     }
 
+
     @Override
-    public String formaterVehicule(Vehicule vehicule)
-    {
+    public String formaterVehicule(Vehicule vehicule) {
         return vehicule.getType() + "," +
                 vehicule.getMarque() + "," +
                 vehicule.getModele() + "," +
@@ -81,40 +94,97 @@ public class Garage implements InterfaceGarage
     }
 
     @Override
-    public List<String> lireFichier() throws IOException
-    {
+    public List<String> lireFichier() throws IOException {
         File fichier = new File(FICHIER_VEHICULES);
-        if (!fichier.exists())
-        {
+        if (!fichier.exists()) {
             fichier.createNewFile();
         }
 
         List<String> lignes = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(fichier)))
-        {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fichier))) {
             String ligne;
-            while ((ligne = reader.readLine()) != null)
-            {
+            while ((ligne = reader.readLine()) != null) {
                 lignes.add(ligne);
             }
         }
         return lignes;
     }
+
     @Override
-    public void ecrireFichier(List<String> lignes) throws IOException
-    {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FICHIER_VEHICULES)))
-        {
-            for (String ligne : lignes)
-            {
+    public void ecrireFichier(List<String> lignes) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FICHIER_VEHICULES))) {
+            for (String ligne : lignes) {
                 writer.write(ligne);
                 writer.newLine();
             }
         }
     }
 
-    public void encoderVehicule()
+    public void chargerVehiculesDepuisFichier() throws IOException {
+        listeVehicules.clear();
+        List<String> lignes = lireFichier();
+
+        for (String ligne : lignes) {
+            String[] attributs = ligne.split(",");
+            if (attributs.length == 8) {  // Vérifie qu'il y a bien 8 attributs
+                String type = attributs[0]; // Type du véhicule (Voiture, Camion, etc.)
+                String marque = attributs[1];
+                String modele = attributs[2];
+                String puissance = attributs[3];
+                String transmission = attributs[4];
+                String pays = attributs[5];
+                int annee = Integer.parseInt(attributs[6]);
+                String image = attributs[7];
+
+                Vehicule vehicule;
+                switch (type) {
+                    case "Voiture":
+                        vehicule = new Voiture(marque, modele, puissance, transmission, pays, annee, image);
+                        break;
+                    case "Moto":
+                        vehicule = new Moto(marque, modele, puissance, transmission, pays, annee, image);
+                        break;
+                    case "Camionnette":
+                        vehicule = new Camionnette(marque, modele, puissance, transmission, pays, annee, image);
+                        break;
+                    case "Camion":
+                        vehicule = new Camion(marque, modele, puissance, transmission, pays, annee, image);
+                        break;
+                    default:
+                        System.out.println("Type de véhicule inconnu: " + type);
+                        continue; // Ignore cette ligne si le type est inconnu
+                }
+
+                listeVehicules.add(vehicule);
+            }
+        }
+    }
+
+
+    public Vehicule rechercherVehicule(String type, String marque, String modele)
     {
+        try
+        {
+            chargerVehiculesDepuisFichier();
+        }
+        catch (IOException e)
+        {
+            System.err.println("Erreur lors du chargement des véhicules : " + e.getMessage());
+        }
+
+        for (Vehicule v : listeVehicules)
+        {
+            if (v.getType().equalsIgnoreCase(type) && v.getMarque().equalsIgnoreCase(marque) && v.getModele().equalsIgnoreCase(modele))
+            {
+                System.out.println(type + marque + modele);
+                return v;
+            }
+        }
+        return null;
+    }
+
+
+    public void encoderVehicule() {
         Scanner scanner = new Scanner(System.in);
 
         try {
@@ -146,9 +216,7 @@ public class Garage implements InterfaceGarage
             if (type.equalsIgnoreCase("Voiture"))
             {
                 vehicule = new Voiture(marque, modele, puissance, transmission, pays, annee, cheminImage);
-            }
-            else
-            {
+            } else {
                 System.out.println("Type non pris en charge pour le moment.");
                 return;
             }
@@ -156,13 +224,9 @@ public class Garage implements InterfaceGarage
             ajouterVehicule(vehicule);
             System.out.println("Véhicule ajouté avec succès.");
 
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             System.err.println("Erreur lors de l'ajout du véhicule: " + e.getMessage());
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             System.err.println("Année invalide.");
         }
     }
@@ -173,7 +237,8 @@ public class Garage implements InterfaceGarage
         {
             String ligne;
             System.out.println("Contenu du fichier Vehicles.txt :");
-            while ((ligne = reader.readLine()) != null) {
+            while ((ligne = reader.readLine()) != null)
+            {
                 System.out.println(ligne);
             }
         }
@@ -183,27 +248,21 @@ public class Garage implements InterfaceGarage
         }
     }
 
-    public static void main(String[] args)
-    {
-        Garage garage = new Garage();
+    public static void main(String[] args) {
+        Garage garage = Garage.getGarage();  // Utiliser le singleton
 
-        try
-        {
-            Vehicule voiture = new Voiture("Suzuki", "Swift", "65 ch", "Manuelle", "Japon", 2006, "C:/Users/Loris/SuzukiSwift.jpg");
+        try {
+            //Vehicule voiture = new Voiture("Nissan", "GTR", "65 ch", "Manuelle", "Japon", 2005, "");
+            //garage.ajouterVehicule(voiture);
 
-            // Ajout d'un véhicule
-            garage.ajouterVehicule(voiture);
+            //voiture.setPuissance("650 ch");
+            //voiture.setTransmission("Automatique");
+            //voiture.setAnnee(2022);
 
-            // Suppression d'un véhicule
-            //garage.supprimerVehicule("Voiture", "Nissan", "GTR");
-
-            // Modification d'un véhicule
-            //Vehicule voitureModifiee = new Voiture("Nissan", "GTR", "650 ch", "Automatique", "Japon", 2022, "C:/Users/Loris/NissanGTR.jpg");
-            //garage.modifierVehicule(voitureModifiee);
-
-            //garage.encoderVehicule();
-
+            //garage.modifierVehicule(voiture);
             garage.afficherFichierVehicules();
+
+            Vehicule vehicule = garage.rechercherVehicule("Voiture", "Renault", "Clio");
 
         }
         catch (IOException e)

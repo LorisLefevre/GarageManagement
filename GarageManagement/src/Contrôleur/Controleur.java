@@ -79,6 +79,7 @@ public class Controleur implements ActionListener
         if(actionEvent.getActionCommand().equals(ActionsControleur.SUPPRIMER))
         {
             System.out.println("\nSupression du véhicule\n");
+            garageWindow.Supprimer();
         }
 
         if(actionEvent.getActionCommand().equals(ActionsControleur.MODIFIER))
