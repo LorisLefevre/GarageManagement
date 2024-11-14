@@ -1,6 +1,6 @@
 package Vue.MéthodesGarageWindow;
 
-import Modèle.GestionDeDonnees.Garage;
+import Modèle.GestionDeDonnees.GestionFichier;
 import Vue.InterfacesGraphiques.GarageWindow;
 
 import javax.imageio.ImageIO;
@@ -14,9 +14,6 @@ import java.util.List;
 
 public class MéthodesGarageWindow
 {
-    private GarageWindow garageWindow;
-    private MéthodesBoutonsGarageWindow méthodesBoutonsGarageWindow;
-
     private static MéthodesGarageWindow instance;
 
     public static MéthodesGarageWindow getInstance()
@@ -33,7 +30,7 @@ public class MéthodesGarageWindow
     {
         try
         {
-            List<String> lignes = Garage.getGarage().lireFichier();
+            List<String> lignes = GestionFichier.getInstance().lireFichier();
 
             for (String ligne : lignes)
             {
@@ -93,4 +90,17 @@ public class MéthodesGarageWindow
             return null;
         }
     }
+    public void RechargerTable()
+    {
+        // Lire les données depuis le fichier
+        lireDonneesDepuisFichier();
+
+        DefaultTableModel model = (DefaultTableModel) GarageWindow.getGarageWindow().getTable().getModel();
+        model.setRowCount(0);
+
+        loadTableData("Tout");
+
+        model.fireTableDataChanged();
+    }
+
 }

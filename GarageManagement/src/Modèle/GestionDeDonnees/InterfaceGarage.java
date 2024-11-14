@@ -11,6 +11,5 @@ public interface InterfaceGarage
     void supprimerVehicule(String type, String marque, String modele) throws IOException;
     void modifierVehicule(String ancienType, String ancienneMarque, String ancienModele, Vehicule vehicule) throws IOException;
     String formaterVehicule(Vehicule vehicule);
-    List<String> lireFichier() throws IOException;
-    void ecrireFichier(List<String> lignes) throws IOException;
+    Vehicule rechercherVehicule(String type, String marque, String modele);
 }

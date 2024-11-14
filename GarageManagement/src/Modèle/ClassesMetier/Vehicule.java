@@ -14,9 +14,8 @@ public class Vehicule
     private String pays;
     private int annee;
     private String image;
-    private String type; // Champ pour définir le type du véhicule
+    private String type;
 
-    // Constructeur
     public Vehicule(String marque, String modele, String puissance, String transmission, String pays, int annee, String image, String type)
     {
         this.marque = marque;
@@ -30,29 +29,83 @@ public class Vehicule
     }
 
     // Getters et Setters
-    public String getMarque() { return marque; }
-    public void setMarque(String marque) { this.marque = marque; }
+    public String getMarque()
+    {
+        return marque;
+    }
+    public void setMarque(String marque)
+    {
+        this.marque = marque;
+    }
 
-    public String getModele() { return modele; }
-    public void setModele(String modele) { this.modele = modele; }
+    public String getModele()
+    {
+        return modele;
+    }
+    public void setModele(String modele)
+    {
+        this.modele = modele;
+    }
 
-    public String getPuissance() { return puissance; }
-    public void setPuissance(String puissance) { this.puissance = puissance; }
+    public String getPuissance()
+    {
+        return puissance;
+    }
+    public void setPuissance(String puissance)
+    {
+        this.puissance = puissance;
+    }
 
     public String getTransmission() { return transmission; }
-    public void setTransmission(String transmission) { this.transmission = transmission; }
+    public void setTransmission(String transmission)
+    {
+        this.transmission = transmission;
+    }
 
-    public String getPays() { return pays; }
-    public void setPays(String pays) { this.pays = pays; }
+    public String getPays()
+    {
+        return pays;
+    }
+    public void setPays(String pays)
+    {
+        this.pays = pays;
+    }
 
-    public int getAnnee() { return annee; }
-    public void setAnnee(int annee) { this.annee = annee; }
+    public int getAnnee()
+    {
+        return annee;
+    }
+    public void setAnnee(int annee)
+    {
+        if(annee >= 1885 && annee <= 2025)
+        {
+            this.annee = annee;
+        }
 
-    public String getImage() { return image; }
-    public void setImage(String image) { this.image = image; }
+        else
+        {
+            throw new IllegalArgumentException("L'année du véhicule est invalide");
+        }
 
-    public String getType() { return type; } // Getter pour le type
-    public void setType(String type) { this.type = type; } // Setter pour le type
+    }
+
+    public String getImage()
+    {
+        return image;
+    }
+    public void setImage(String image)
+    {
+        this.image = image;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+    public void setType(String type)
+    {
+        this.type = type;
+    }
 
     // Méthode toString
     @Override

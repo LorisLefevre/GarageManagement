@@ -13,14 +13,8 @@ public class LoginWindow extends JFrame implements VueLoginWindow
 {
     private LoginWindow loginWindow;
     private GarageWindow garageWindow;
-    private GestionUtilisateurs gestionUtilisateurs;
 
     private Controleur controleur;
-
-    public Controleur getControleur()
-    {
-        return controleur;
-    }
 
     private JTextField UsernameField;
     public JTextField getUsernameField()
@@ -35,16 +29,8 @@ public class LoginWindow extends JFrame implements VueLoginWindow
     }
 
     private JButton LoginButton;
-    public JButton getLoginButton()
-    {
-        return LoginButton;
-    }
 
     private JButton LogoutButton;
-    public JButton getLogoutButton()
-    {
-        return LogoutButton;
-    }
 
     private JPanel MainPanel;
 
@@ -148,6 +134,7 @@ public class LoginWindow extends JFrame implements VueLoginWindow
                 this.garageWindow = new GarageWindow();
             }
             this.garageWindow = GarageWindow.getGarageWindow();
+            garageWindow.ChargementDonnees();
             garageWindow.setUserLabel(Username);
             garageWindow.setVisible(true);
         }

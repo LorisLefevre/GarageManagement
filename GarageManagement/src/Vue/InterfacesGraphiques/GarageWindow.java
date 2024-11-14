@@ -59,6 +59,8 @@ public class GarageWindow extends JFrame implements VueGarageWindow
     {
         messageLabel.setText("");
     }
+
+    private LoginWindow loginWindow;
     private Garage garage;
     private static GarageWindow instance;
     public static GarageWindow getGarageWindow()
@@ -66,8 +68,6 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         if(instance == null)
         {
             instance = new GarageWindow();
-            MéthodesGarageWindow.getInstance().lireDonneesDepuisFichier();
-            MéthodesGarageWindow.getInstance().loadTableData("Tout");
         }
         return instance;
     }
@@ -94,7 +94,6 @@ public class GarageWindow extends JFrame implements VueGarageWindow
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        // Étiquette utilisateur
         userLabel = new JLabel();
         userLabel.setFont(new Font("Arial", Font.BOLD, 14));
         topPanel.add(userLabel);
@@ -125,11 +124,12 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel(new BorderLayout());
-        messageLabel = new JLabel("Données de véhicules affichées avec succès");
+        messageLabel = new JLabel("Bonjour " + userLabel.getText());
         messageLabel.setFont(new Font("Arial", Font.ITALIC, 12));
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         bottomPanel.add(messageLabel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
+
     }
     static class ImageRenderer extends JLabel implements TableCellRenderer
     {
@@ -182,23 +182,31 @@ public class GarageWindow extends JFrame implements VueGarageWindow
     {
         showMessage("Ajout de véhicule");
         MéthodesBoutonsGarageWindow.getInstance().BoutonAjouter();
+        messageLabel.setText("Véhicule ajouté");
     }
 
     public void Supprimer()
     {
         showMessage("Suppression du véhicule");
         MéthodesBoutonsGarageWindow.getInstance().BoutonSupprimer();
+        messageLabel.setText("Véhicule supprimé");
     }
 
     public void Modifier()
     {
         showMessage("Modification d'un véhicule");
         MéthodesBoutonsGarageWindow.getInstance().BoutonModifier();
+        messageLabel.setText("Véhicule modifié");
     }
 
     public void Trier()
     {
-        showMessage("Tri de véhicules par type");
         MéthodesBoutonsGarageWindow.getInstance().BoutonTrier();
+        messageLabel.setText("Tri effectué");
+    }
+
+    public void ChargementDonnees()
+    {
+        MéthodesGarageWindow.getInstance().RechargerTable();
     }
 }

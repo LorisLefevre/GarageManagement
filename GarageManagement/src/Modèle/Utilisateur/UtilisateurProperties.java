@@ -8,7 +8,7 @@ public class UtilisateurProperties
     public static void main(String[] args)
     {
         Properties properties = new Properties();
-        properties.setProperty("Loris", "LorisRace02");
+        properties.setProperty("aaa", "aaa");
 
         String filePath = "utilisateurs.properties";
 
