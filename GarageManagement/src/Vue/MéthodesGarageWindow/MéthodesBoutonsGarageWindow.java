@@ -1,6 +1,7 @@
 package Vue.MéthodesGarageWindow;
 
 import Modèle.ClassesMetier.*;
+import Modèle.GestionBaseDeDonnees.Requetes;
 import Modèle.GestionDeDonnees.Garage;
 import Vue.InterfacesGraphiques.FormulaireVehicule;
 import Vue.InterfacesGraphiques.GarageWindow;
@@ -67,6 +68,8 @@ public class MéthodesBoutonsGarageWindow
                 JOptionPane.showMessageDialog(null, "Erreur lors de l'ajout du véhicule: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
 
+            Requetes.getInstance().AjouterVoiture(marque, modele,puissance, transmission, annee, pays, imagePath);
+
             MéthodesGarageWindow.getInstance().RechargerTable();
         }
     }
@@ -101,6 +104,8 @@ public class MéthodesBoutonsGarageWindow
         {
             JOptionPane.showMessageDialog(null, "Erreur lors de la suppression du véhicule: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
         }
+
+        Requetes.getInstance().SupprimerVoiture(marque, modele);
 
         MéthodesGarageWindow.getInstance().RechargerTable();
     }

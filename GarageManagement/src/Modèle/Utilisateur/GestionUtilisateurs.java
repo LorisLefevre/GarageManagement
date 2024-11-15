@@ -15,7 +15,8 @@ public class GestionUtilisateurs
     private static final Map<String, Utilisateur> utilisateurs = new HashMap<>();
     private static final String FILE_PATH = "utilisateurs.properties";
 
-    public static Utilisateur seConnecter(String username, String password) {
+    public static Utilisateur seConnecter(String username, String password)
+    {
         loadUserData();
 
         if (utilisateurs.containsKey(username)) {
@@ -40,12 +41,15 @@ public class GestionUtilisateurs
         }
     }
 
-    private static void loadUserData() {
+    private static void loadUserData()
+    {
         Properties properties = new Properties();
-        try (FileInputStream fis = new FileInputStream(FILE_PATH)) {
+        try (FileInputStream fis = new FileInputStream(FILE_PATH))
+        {
             properties.load(fis);
 
-            for (String username : properties.stringPropertyNames()) {
+            for (String username : properties.stringPropertyNames())
+            {
                 String[] parts = properties.getProperty(username).split(":");
                 if (parts.length == 2) {
                     String motDePasseHash = parts[0];
@@ -53,7 +57,9 @@ public class GestionUtilisateurs
                     utilisateurs.put(username, new Utilisateur(username, motDePasseHash, salt));
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage());
         }
     }
@@ -82,18 +88,22 @@ public class GestionUtilisateurs
         return bytesToHex(salt);
     }
 
-    private static String hasherMotDePasse(String motDePasse, String salt) {
+    private static String hasherMotDePasse(String motDePasse, String salt)
+    {
         try {
             PBEKeySpec spec = new PBEKeySpec(motDePasse.toCharArray(), salt.getBytes(), 65536, 128);
             SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             byte[] hash = factory.generateSecret(spec).getEncoded();
             return bytesToHex(hash);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+        }
+        catch (NoSuchAlgorithmException | InvalidKeySpecException e)
+        {
             throw new RuntimeException("Erreur de hashage", e);
         }
     }
 
-    private static boolean verifierMotDePasse(String motDePasse, String hashEnregistre, String salt) {
+    private static boolean verifierMotDePasse(String motDePasse, String hashEnregistre, String salt)
+    {
         String hashCalculé = hasherMotDePasse(motDePasse, salt);
         return hashCalculé.equals(hashEnregistre);
     }
