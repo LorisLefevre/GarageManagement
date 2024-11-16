@@ -121,8 +121,6 @@ public class Vehicule
                 ", type='" + type + '\'' +
                 '}';
     }
-
-    // Méthode pour afficher les informations du véhicule
     public void afficher()
     {
         System.out.println("Marque : " + marque);
@@ -132,87 +130,5 @@ public class Vehicule
         System.out.println("Pays : " + pays);
         System.out.println("Année : " + annee);
         System.out.println("Type : " + type); // Affichage du type du véhicule
-    }
-
-    public static void main(String[] args)
-    {
-        // Exemple de création des véhicules
-        Voiture voiture1 = new Voiture("Nissan", "GTR", "600 ch", "Automatique", "Japon", 2021, "null");
-        Voiture voiture2 = new Voiture("Toyota", "Supra", "335 ch", "Automatique", "Japon", 2021, "null");
-        Moto moto1 = new Moto("Yamaha", "R1", "200 ch", "Manuelle", "Japon", 2019, "null");
-        Camionnette camionnette1 = new Camionnette("Ford", "Transit", "130 ch", "Automatique", "États-Unis", 2020, "null");
-        Camion camion1 = new Camion("Volvo", "FH16", "750 ch", "Automatique", "Suède", 2022, "null");
-
-        // Création de la liste de véhicules
-        List<Vehicule> vehicules = new ArrayList<>();
-        vehicules.add(voiture1);
-        vehicules.add(voiture2);
-        vehicules.add(moto1);
-        vehicules.add(camionnette1);
-        vehicules.add(camion1);
-
-        // Liste pour chaque type de véhicule
-        List<Vehicule> voitures = new ArrayList<>();
-        List<Vehicule> motos = new ArrayList<>();
-        List<Vehicule> camionnettes = new ArrayList<>();
-        List<Vehicule> camions = new ArrayList<>();
-
-        // Séparation des véhicules par type
-        for (Vehicule vehicule : vehicules)
-        {
-            if (vehicule.getType().equals("Voiture"))
-            {
-                voitures.add(vehicule);
-            }
-            else if (vehicule.getType().equals("Moto"))
-            {
-                motos.add(vehicule);
-            }
-            else if (vehicule.getType().equals("Camionnette"))
-            {
-                camionnettes.add(vehicule);
-            }
-            else if (vehicule.getType().equals("Camion"))
-            {
-                camions.add(vehicule);
-            }
-        }
-
-        // Affichage des véhicules par type
-        if (!voitures.isEmpty())
-        {
-            System.out.println("\nVOITURES\n");
-            for (Vehicule voiture : voitures)
-            {
-                voiture.afficher();
-            }
-        }
-
-        if (!motos.isEmpty())
-        {
-            System.out.println("\nMOTOS\n");
-            for (Vehicule moto : motos)
-            {
-                moto.afficher();
-            }
-        }
-
-        if (!camionnettes.isEmpty())
-        {
-            System.out.println("\nCAMIONNETTES\n");
-            for (Vehicule camionnette : camionnettes)
-            {
-                camionnette.afficher();
-            }
-        }
-
-        if (!camions.isEmpty())
-        {
-            System.out.println("\nCAMIONS\n");
-            for (Vehicule camion : camions)
-            {
-                camion.afficher();
-            }
-        }
     }
 }

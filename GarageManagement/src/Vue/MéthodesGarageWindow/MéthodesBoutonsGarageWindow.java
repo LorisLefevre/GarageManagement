@@ -31,7 +31,6 @@ public class MéthodesBoutonsGarageWindow
 
         if(result == JOptionPane.OK_OPTION)
         {
-            // Récupérer le JComboBox à l'index 1 (le premier champ de sélection après le JLabel)
             String type = (String) ((JComboBox<?>) panel.getComponent(1)).getSelectedItem(); // Index 1 pour le JComboBox
             String marque = ((JTextField) panel.getComponent(3)).getText(); // Index 3 pour le JTextField "Marque"
             String modele = ((JTextField) panel.getComponent(5)).getText(); // Index 5 pour le JTextField "Modèle"
@@ -68,8 +67,6 @@ public class MéthodesBoutonsGarageWindow
                 JOptionPane.showMessageDialog(null, "Erreur lors de l'ajout du véhicule: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
 
-            Requetes.getInstance().AjouterVoiture(marque, modele,puissance, transmission, annee, pays, imagePath);
-
             MéthodesGarageWindow.getInstance().RechargerTable();
         }
     }
@@ -104,8 +101,6 @@ public class MéthodesBoutonsGarageWindow
         {
             JOptionPane.showMessageDialog(null, "Erreur lors de la suppression du véhicule: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
         }
-
-        Requetes.getInstance().SupprimerVoiture(marque, modele);
 
         MéthodesGarageWindow.getInstance().RechargerTable();
     }

@@ -26,7 +26,8 @@ public class GestionFichier
     {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FICHIER_VEHICULES)))
         {
-            for (String ligne : lignes) {
+            for (String ligne : lignes)
+            {
                 writer.write(ligne);
                 writer.newLine();
             }
@@ -86,7 +87,7 @@ public class GestionFichier
                         break;
                     default:
                         System.out.println("Type de véhicule inconnu: " + type);
-                        continue; // Ignore cette ligne si le type est inconnu
+                        continue;
                 }
 
                 listeVehicules.add(vehicule);

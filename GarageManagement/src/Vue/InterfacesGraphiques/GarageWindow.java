@@ -3,6 +3,7 @@ package Vue.InterfacesGraphiques;
 import Contrôleur.ActionsControleur;
 import Contrôleur.Controleur;
 import Modèle.GestionDeDonnees.Garage;
+import Vue.MéthodesGarageWindow.ChoixUtilisateur;
 import Vue.MéthodesGarageWindow.MéthodesBoutonsGarageWindow;
 import Vue.MéthodesGarageWindow.MéthodesGarageWindow;
 import Vue.Vues.VueGarageWindow;
@@ -181,24 +182,23 @@ public class GarageWindow extends JFrame implements VueGarageWindow
     public void Ajouter()
     {
         showMessage("Ajout de véhicule");
-        MéthodesBoutonsGarageWindow.getInstance().BoutonAjouter();
+        ChoixUtilisateur.getInstance().ChoixAjout();
         messageLabel.setText("Véhicule ajouté");
     }
 
     public void Supprimer()
     {
         showMessage("Suppression du véhicule");
-        MéthodesBoutonsGarageWindow.getInstance().BoutonSupprimer();
+        ChoixUtilisateur.getInstance().ChoixSuppression();
         messageLabel.setText("Véhicule supprimé");
     }
 
     public void Modifier()
     {
         showMessage("Modification d'un véhicule");
-        MéthodesBoutonsGarageWindow.getInstance().BoutonModifier();
+        ChoixUtilisateur.getInstance().ChoixModification();
         messageLabel.setText("Véhicule modifié");
     }
-
     public void Trier()
     {
         MéthodesBoutonsGarageWindow.getInstance().BoutonTrier();

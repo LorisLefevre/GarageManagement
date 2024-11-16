@@ -25,3 +25,4 @@ Voiture,Gillet,Vertigo Streiff,250 ch,Manuelle,Belgique,2002,C:\Users\Loris\Idea
 Voiture,Citroën,DS3,226 ch,Manuelle,France,2011,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\NEWS_5061_1.jpg
 Voiture,Opel,Astra,178 h,Manuelle,Allemagne,2015,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\opel--astra-5p--2015-t-1.jpg
 Voiture,Toyota,GR86,248 ch,Automatique,Japon,2022,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\toyota-gr86-2.jpg
+Voiture,Citroën,Xsara,103 ch,Manuelle,France,1999,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\CitroenXsara99.jpg

@@ -33,13 +33,22 @@ public class CreationTables
         }
     }
 
+    public void SupprimerTable(String Nom)
+    {
+        String sql = "DROP TABLE IF EXISTS " + Nom;
+
+        ExecuterRequeteCreationTable(sql, "Table Supprimée");
+    }
+
     public void CreationTableVoiture()
     {
+        SupprimerTable("voiture");
+
         String sql = "CREATE TABLE IF NOT EXISTS voiture (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "marque VARCHAR(50), " +
                 "modele VARCHAR(50), " +
-                "puissance INT, " +
+                "puissance VARCHAR(10), " +
                 "transmission VARCHAR(20), " +
                 "annee INT, " +
                 "pays VARCHAR(50), " +
@@ -50,11 +59,13 @@ public class CreationTables
 
     public void CreationTableMoto()
     {
+        SupprimerTable("moto");
+
         String sql = "CREATE TABLE IF NOT EXISTS moto (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "marque VARCHAR(50), " +
                 "modele VARCHAR(50), " +
-                "puissance INT, " +
+                "puissance VARCHAR(10), " +
                 "transmission VARCHAR(20), " +
                 "annee INT, " +
                 "pays VARCHAR(50), " +
@@ -65,11 +76,13 @@ public class CreationTables
 
     public void CreationTableCamionnette()
     {
+        SupprimerTable("camionnette");
+
         String sql = "CREATE TABLE IF NOT EXISTS camionnette (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "marque VARCHAR(50), " +
                 "modele VARCHAR(50), " +
-                "puissance INT, " +
+                "puissance VARCHAR(10), " +
                 "transmission VARCHAR(20), " +
                 "annee INT, " +
                 "pays VARCHAR(50), " +
@@ -80,6 +93,8 @@ public class CreationTables
 
     public void CreationTableCamion()
     {
+        SupprimerTable("camion");
+
         String sql = "CREATE TABLE IF NOT EXISTS camion (" +
                 "id INT AUTO_INCREMENT PRIMARY KEY, " +
                 "marque VARCHAR(50), " +
@@ -107,31 +122,6 @@ public class CreationTables
         }
     }
 
-    public void ajouterVoiture(String marque, String modele, int puissance, String transmission, int annee, String pays, String image) {
-        String sql = "INSERT INTO voiture (marque, modele, puissance, transmission, annee, pays, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            // Remplir les paramètres de la requête
-            statement.setString(1, marque);
-            statement.setString(2, modele);
-            statement.setInt(3, puissance);
-            statement.setString(4, transmission);
-            statement.setInt(5, annee);
-            statement.setString(6, pays);
-            statement.setString(7, image);
-
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Voiture ajoutée avec succès !");
-            } else {
-                System.out.println("Erreur lors de l'ajout de la voiture.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void main(String[] args)
     {
@@ -143,7 +133,5 @@ public class CreationTables
         creationTables.CreationTableCamionnette();
         creationTables.CreationTableCamion();
 
-
-        creationTables.ajouterVoiture("Toyota", "Corolla", 120, "Manuelle", 2020, "Japon", null);
     }
 }
