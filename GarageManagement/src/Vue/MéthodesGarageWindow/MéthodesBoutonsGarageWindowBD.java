@@ -57,7 +57,7 @@ public class MéthodesBoutonsGarageWindowBD
 
             Vehicule vehicule = FormulaireVehicule.getInstance().CreerVehiculeDeFormulaire(type, marque, modele, puissance, transmission, annee, pays, imagePath);
 
-            Requetes.getInstance().AjouterVoiture(marque, modele,puissance, transmission, annee, pays, imagePath);
+            Requetes.getInstance().AjouterVehicule(type,marque, modele,puissance, transmission, annee, pays, imagePath);
 
             MéthodesGarageWindow.getInstance().RechargerTable();
         }
@@ -84,7 +84,7 @@ public class MéthodesBoutonsGarageWindowBD
 
         Vehicule vehiculeSupprime = FormulaireVehicule.getInstance().CreerVehiculeDeFormulaire(type, marque, modele, puissance, transmission, annee, pays, imagePath);
 
-        Requetes.getInstance().SupprimerVoiture(marque, modele);
+        Requetes.getInstance().SupprimerVehicule(type,marque, modele);
 
         MéthodesGarageWindow.getInstance().RechargerTable();
     }
