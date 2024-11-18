@@ -8,4 +8,9 @@ public class Camion extends Vehicule
     {
         super(marque, modele, puissance, transmission, pays, annee, image, "Camion");
     }
+
+    public Camion(int id, String marque, String modele, String puissance, String transmission, String pays, int annee, String image)
+    {
+        super(id, marque, modele, puissance, transmission, pays, annee, image, "Camion");
+    }
 }

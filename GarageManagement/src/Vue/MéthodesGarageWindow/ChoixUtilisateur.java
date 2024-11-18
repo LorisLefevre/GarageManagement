@@ -88,4 +88,29 @@ public class ChoixUtilisateur
         }
     }
 
+    public void ChoixAffichage()
+    {
+        JComboBox<String> comboBoxAffichage = new JComboBox<>(new String[]{"Fichier.txt", "Base de données"});
+        comboBoxAffichage.setSelectedIndex(0); // Option par défaut
+        JOptionPane.showMessageDialog(null, comboBoxAffichage, "Choisissez une option pour Modification", JOptionPane.QUESTION_MESSAGE);
+        String choix = (String) comboBoxAffichage.getSelectedItem();
+        System.out.println("Choix pour Affichage : " + choix);
+
+        if ("Fichier.txt".equals(choix))
+        {
+            System.out.println("Affichage de données dans le fichier texte sélectionné.");
+            MéthodesGarageWindow.getInstance().RechargerTable();
+        }
+        else if ("Base de données".equals(choix))
+        {
+            System.out.println("Affichage de données dans la base de données sélectionné.");
+            MéthodesGarageWindow.getInstance().RechargerTableBD();
+
+        }
+        else
+        {
+            System.out.println("Aucun choix valide.");
+        }
+    }
+
 }

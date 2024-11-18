@@ -1,9 +1,10 @@
 package Modèle.GestionBaseDeDonnees;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import Modèle.ClassesMetier.Vehicule;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Requetes
 {
@@ -53,20 +54,21 @@ public class Requetes
         }
     }
 
-    public void SupprimerVehicule(String type, String marque, String modele)
+    public void SupprimerVehicule(int id, String type)
     {
-        String sql = "DELETE FROM " + type + " WHERE marque = ? AND modele = ?";
+        String sql = "DELETE FROM " + type + " WHERE id = ?";
 
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(sql))
         {
-            statement.setString(1, marque);
-            statement.setString(2, modele);
+
+            statement.setInt(1, id);
 
             int rowsAffected = statement.executeUpdate();
+
             if (rowsAffected > 0)
             {
-                System.out.println("Le/La " + type + " a supprimé(e) avec succès !");
+                System.out.println("Le/La " + type + " a été supprimé(e) avec succès !");
             }
             else
             {
@@ -77,5 +79,33 @@ public class Requetes
         {
             e.printStackTrace();
         }
+    }
+
+    public List<Vehicule> RecupererVoitures() throws SQLException
+    {
+        String sql = "SELECT * FROM voiture";
+        List<Vehicule> vehicules = new ArrayList<>();
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql))
+        {
+            while (rs.next())
+            {
+                int id = rs.getInt("id");
+                String marque = rs.getString("marque");
+                String modele = rs.getString("modele");
+                String puissance = rs.getString("puissance");
+                String transmission = rs.getString("transmission");
+                String pays = rs.getString("pays");
+                String image = rs.getString("image");
+
+                int annee = rs.getInt("annee");
+
+                Vehicule vehicule = new Vehicule(id, marque, modele, puissance, transmission, pays, annee, image, "Voiture");
+                vehicules.add(vehicule);
+            }
+        }
+        return vehicules;
     }
 }

@@ -60,30 +60,32 @@ public class GestionFichier
 
         for (String ligne : lignes) {
             String[] attributs = ligne.split(",");
-            if (attributs.length == 8)
+            if (attributs.length == 9)
             {
-                String type = attributs[0];
-                String marque = attributs[1];
-                String modele = attributs[2];
-                String puissance = attributs[3];
-                String transmission = attributs[4];
-                String pays = attributs[5];
-                int annee = Integer.parseInt(attributs[6]);
-                String image = attributs[7];
+                int id = Integer.parseInt(attributs[0]);
+                String type = attributs[1];
+                String marque = attributs[2];
+                String modele = attributs[3];
+                String puissance = attributs[4];
+                String transmission = attributs[5];
+                String pays = attributs[6];
+                int annee = Integer.parseInt(attributs[7]);
+                String image = attributs[8];
 
                 Vehicule vehicule;
-                switch (type) {
+                switch (type)
+                {
                     case "Voiture":
-                        vehicule = new Voiture(marque, modele, puissance, transmission, pays, annee, image);
+                        vehicule = new Voiture(id, marque, modele, puissance, transmission, pays, annee, image);
                         break;
                     case "Moto":
-                        vehicule = new Moto(marque, modele, puissance, transmission, pays, annee, image);
+                        vehicule = new Moto(id, marque, modele, puissance, transmission, pays, annee, image);
                         break;
                     case "Camionnette":
-                        vehicule = new Camionnette(marque, modele, puissance, transmission, pays, annee, image);
+                        vehicule = new Camionnette(id,marque, modele, puissance, transmission, pays, annee, image);
                         break;
                     case "Camion":
-                        vehicule = new Camion(marque, modele, puissance, transmission, pays, annee, image);
+                        vehicule = new Camion(id, marque, modele, puissance, transmission, pays, annee, image);
                         break;
                     default:
                         System.out.println("Type de véhicule inconnu: " + type);
@@ -96,6 +98,20 @@ public class GestionFichier
         return listeVehicules;
     }
 
+    public static int getDernierId() throws IOException
+    {
+        int dernierId = 0;
+
+        List<String> lignes = lireFichier();
+        for (String ligne : lignes) {
+            String[] attributs = ligne.split(",");
+            if (attributs.length > 0) {
+                int id = Integer.parseInt(attributs[0]); // Le premier champ est l'ID
+                dernierId = Math.max(dernierId, id);
+            }
+        }
+        return dernierId;
+    }
 
 
 

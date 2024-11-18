@@ -9,4 +9,9 @@ public class Moto extends Vehicule
         super(marque, modele, puissance, transmission, pays, annee, image, "Moto");
     }
 
+    public Moto(int id, String marque, String modele, String puissance, String transmission, String pays, int annee, String image)
+    {
+        super(id, marque, modele, puissance, transmission, pays, annee, image, "Moto");
+    }
+
 }

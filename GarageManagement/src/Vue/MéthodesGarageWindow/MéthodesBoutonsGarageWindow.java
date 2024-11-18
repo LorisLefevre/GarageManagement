@@ -75,61 +75,58 @@ public class MéthodesBoutonsGarageWindow
     {
         int selectedRow = GarageWindow.getGarageWindow().getTable().getSelectedRow();
 
-        if (selectedRow == -1)
-        {
+        if (selectedRow == -1) {
             JOptionPane.showMessageDialog(null, "Veuillez sélectionner un véhicule à supprimer.", "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        String type = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 0);
-        String marque = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 1);
-        String modele = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 2);
-        String puissance = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 3);
-        String transmission = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 4);
-        String pays = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 5);
-        int annee = Integer.parseInt((String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 6));
-        String imagePath = "";
+        // Récupérer l'ID depuis la colonne correspondante
+        int id = Integer.parseInt(GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 0).toString());
 
-        Vehicule vehiculeSupprime = FormulaireVehicule.getInstance().CreerVehiculeDeFormulaire(type, marque, modele, puissance, transmission, annee, pays, imagePath);
+        int confirmation = JOptionPane.showConfirmDialog(
+                null,
+                "Êtes-vous sûr de vouloir supprimer ce véhicule ?",
+                "Confirmation",
+                JOptionPane.YES_NO_OPTION
+        );
 
-        try
-        {
-            Garage.getGarage().supprimerVehicule(type, marque, modele);
-            JOptionPane.showMessageDialog(null, "Véhicule supprimé avec succès!", "Succès", JOptionPane.INFORMATION_MESSAGE);
+        if (confirmation == JOptionPane.YES_OPTION) {
+            try {
+                Garage.getGarage().supprimerVehicule(id);
+                JOptionPane.showMessageDialog(null, "Véhicule supprimé avec succès!", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                MéthodesGarageWindow.getInstance().RechargerTable();
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Erreur lors de la suppression du véhicule: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
         }
-        catch (IOException ex)
-        {
-            JOptionPane.showMessageDialog(null, "Erreur lors de la suppression du véhicule: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
-        }
-
-        MéthodesGarageWindow.getInstance().RechargerTable();
     }
 
-
-    public void BoutonModifier()
-    {
+    public void BoutonModifier() {
         int selectedRow = GarageWindow.getGarageWindow().getTable().getSelectedRow();
 
-        if (selectedRow == -1)
-        {
+        if (selectedRow == -1) {
             JOptionPane.showMessageDialog(null, "Veuillez sélectionner un véhicule à modifier.", "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        String type = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 0);
-        String marque = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 1);
-        String modele = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 2);
+        // Récupérer l'ID depuis la colonne correspondante
+        int id = Integer.parseInt(GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 0).toString());
 
-        Vehicule vehicule = Garage.getGarage().rechercherVehicule(type, marque, modele);
-        if (vehicule == null)
-        {
+        Vehicule vehicule = Garage.getGarage().rechercherVehiculeParId(id);
+        if (vehicule == null) {
             JOptionPane.showMessageDialog(null, "Véhicule non trouvé.", "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         JPanel panel = FormulaireVehicule.getInstance().VehiculeFormulaire(vehicule);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, "Modifier un véhicule", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(
+                null,
+                panel,
+                "Modifier un véhicule",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE
+        );
 
         if (result == JOptionPane.OK_OPTION)
         {
@@ -139,12 +136,9 @@ public class MéthodesBoutonsGarageWindow
             vehicule.setPuissance(((JTextField) panel.getComponent(7)).getText());
             vehicule.setTransmission(((JTextField) panel.getComponent(9)).getText());
 
-            try
-            {
+            try {
                 vehicule.setAnnee(Integer.parseInt(((JTextField) panel.getComponent(11)).getText()));
-            }
-            catch (NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Veuillez entrer une année valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -152,20 +146,16 @@ public class MéthodesBoutonsGarageWindow
             vehicule.setPays(((JTextField) panel.getComponent(13)).getText());
             vehicule.setImage(((JTextField) panel.getComponent(15)).getText());
 
-            try
-            {
-                Garage.getGarage().modifierVehicule(type, marque, modele, vehicule);
+            try {
+                Garage.getGarage().modifierVehicule(id, vehicule);
                 JOptionPane.showMessageDialog(null, "Véhicule modifié avec succès!", "Succès", JOptionPane.INFORMATION_MESSAGE);
-                MéthodesGarageWindow.getInstance().loadTableData("Tout");
-            }
-            catch (IOException ex)
-            {
+                MéthodesGarageWindow.getInstance().RechargerTable();
+            } catch (IOException ex) {
                 JOptionPane.showMessageDialog(null, "Erreur lors de la modification du véhicule : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
-
-            MéthodesGarageWindow.getInstance().RechargerTable();
         }
     }
+
     public void BoutonTrier()
     {
         String selectedType = (String) GarageWindow.getGarageWindow().getTrier().getSelectedItem();

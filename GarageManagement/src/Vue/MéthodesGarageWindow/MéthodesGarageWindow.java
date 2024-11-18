@@ -1,5 +1,7 @@
 package Vue.MéthodesGarageWindow;
 
+import Modèle.ClassesMetier.Vehicule;
+import Modèle.GestionBaseDeDonnees.Requetes;
 import Modèle.GestionDeDonnees.GestionFichier;
 import Vue.InterfacesGraphiques.GarageWindow;
 
@@ -10,6 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class MéthodesGarageWindow
@@ -35,18 +38,19 @@ public class MéthodesGarageWindow
             for (String ligne : lignes)
             {
                 String[] elements = ligne.split(",");
-                if (elements.length >= 8)
+                if (elements.length >= 9)
                 {
-                    String type = elements[0];
-                    String marque = elements[1];
-                    String modele = elements[2];
-                    String puissance = elements[3];
-                    String transmission = elements[4];
-                    String pays = elements[5];
-                    String annee = elements[6];
-                    String cheminImage = elements[7];
+                    String id = elements[0];
+                    String type = elements[1];
+                    String marque = elements[2];
+                    String modele = elements[3];
+                    String puissance = elements[4];
+                    String transmission = elements[5];
+                    String pays = elements[6];
+                    String annee = elements[7];
+                    String cheminImage = elements[8];
                     var data = GarageWindow.getGarageWindow().getData();
-                    data.add(new Object[]{type, marque, modele, puissance, transmission, pays, annee, getScaledImage(cheminImage)});
+                    data.add(new Object[]{id,type, marque, modele, puissance, transmission, pays, annee, getScaledImage(cheminImage)});
                 }
             }
         }
@@ -92,7 +96,8 @@ public class MéthodesGarageWindow
     }
     public void RechargerTable()
     {
-        // Lire les données depuis le fichier
+        GarageWindow.getGarageWindow().getData().clear();
+
         lireDonneesDepuisFichier();
 
         DefaultTableModel model = (DefaultTableModel) GarageWindow.getGarageWindow().getTable().getModel();
@@ -102,5 +107,42 @@ public class MéthodesGarageWindow
 
         model.fireTableDataChanged();
     }
+
+    public void RechargerTableBD()
+    {
+        try
+        {
+            List<Vehicule> voitures = Requetes.getInstance().RecupererVoitures();
+
+            GarageWindow.getGarageWindow().getData().clear();
+
+            GarageWindow.getGarageWindow().getModel().setRowCount(0);
+
+            for(Vehicule vehicule : voitures)
+            {
+                GarageWindow.getGarageWindow().getModel().addRow(new Object[]{
+                        vehicule.getIdentifiant(),
+                        vehicule.getType(),
+                        vehicule.getMarque(),
+                        vehicule.getModele(),
+                        vehicule.getPuissance(),
+                        vehicule.getTransmission(),
+                        vehicule.getPays(),
+                        vehicule.getAnnee(),
+                        vehicule.getImage()
+                });
+
+            }
+
+        }
+
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            GarageWindow.getGarageWindow().showMessage("Erreur lors de la récupération des sujets : " + e.getMessage());
+        }
+
+    }
+
 
 }

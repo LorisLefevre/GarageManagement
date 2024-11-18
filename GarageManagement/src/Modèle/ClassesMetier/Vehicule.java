@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Vehicule
 {
+    private int identifiant;
     private String marque;
     private String modele;
     private String puissance;
@@ -26,6 +27,29 @@ public class Vehicule
         this.annee = annee;
         this.image = image;
         this.type = type;
+    }
+
+    public Vehicule(int id,String marque, String modele, String puissance, String transmission, String pays, int annee, String image, String type)
+    {
+        this.identifiant = id;
+        this.marque = marque;
+        this.modele = modele;
+        this.puissance = puissance;
+        this.transmission = transmission;
+        this.pays = pays;
+        this.annee = annee;
+        this.image = image;
+        this.type = type;
+    }
+
+    public int getIdentifiant()
+    {
+        return identifiant;
+    }
+
+    public void setIdentifiant(int id)
+    {
+        this.identifiant = id;
     }
 
     // Getters et Setters

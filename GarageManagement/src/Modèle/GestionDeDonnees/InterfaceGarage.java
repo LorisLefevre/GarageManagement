@@ -8,8 +8,8 @@ import java.util.List;
 public interface InterfaceGarage
 {
     void ajouterVehicule(Vehicule vehicule)throws IOException;
-    void supprimerVehicule(String type, String marque, String modele) throws IOException;
-    void modifierVehicule(String ancienType, String ancienneMarque, String ancienModele, Vehicule vehicule) throws IOException;
+    void supprimerVehicule(int id) throws IOException;
+    void modifierVehicule(int id, Vehicule vehicule) throws IOException;
     String formaterVehicule(Vehicule vehicule);
-    Vehicule rechercherVehicule(String type, String marque, String modele);
+    public Vehicule rechercherVehiculeParId(int id);
 }

@@ -76,6 +76,8 @@ public class GarageWindow extends JFrame implements VueGarageWindow
     private JButton Ajouter;
     private JButton Modifier;
     private JButton Supprimer;
+
+    private JButton Afficher;
     private JButton Voir;
 
     private JComboBox<String> Trier;
@@ -102,19 +104,21 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         Ajouter = new JButton("Ajouter");
         Modifier = new JButton("Modifier");
         Supprimer = new JButton("Supprimer");
+        Afficher = new JButton("Afficher");
         Voir = new JButton("Voir");
         Trier = new JComboBox<>(new String[]{"Tout", "Voiture", "Moto", "Camionnette", "Camion"});
 
         topPanel.add(Ajouter);
         topPanel.add(Modifier);
         topPanel.add(Supprimer);
+        topPanel.add(Afficher);
         topPanel.add(Voir);
         topPanel.add(new JLabel("Trier par : "));
         topPanel.add(Trier);
 
         add(topPanel, BorderLayout.NORTH);
 
-        String[] columnNames = {"Type", "Marque", "Modèle", "Puissance", "Transmission", "Pays", "Année", "Image"};
+        String[] columnNames = {"Id", "Type", "Marque", "Modèle", "Puissance", "Transmission", "Pays", "Année", "Image"};
         model = new DefaultTableModel(columnNames, 0);
 
         table = new JTable(model);
@@ -169,12 +173,14 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         Ajouter.setActionCommand(ActionsControleur.AJOUTER);
         Modifier.setActionCommand(ActionsControleur.MODIFIER);
         Supprimer.setActionCommand(ActionsControleur.SUPPRIMER);
+        Afficher.setActionCommand(ActionsControleur.AFFICHER);
         Voir.setActionCommand(ActionsControleur.VOIR);
         Trier.setActionCommand(ActionsControleur.TRIER);
 
         Ajouter.addActionListener(controleur);
         Modifier.addActionListener(controleur);
         Supprimer.addActionListener(controleur);
+        Afficher.addActionListener(controleur);
         Voir.addActionListener(controleur);
         Trier.addActionListener(controleur);
     }
@@ -203,6 +209,12 @@ public class GarageWindow extends JFrame implements VueGarageWindow
     {
         MéthodesBoutonsGarageWindow.getInstance().BoutonTrier();
         messageLabel.setText("Tri effectué");
+    }
+
+    public void Afficher()
+    {
+        showMessage("Choix du type d'affichage");
+        ChoixUtilisateur.getInstance().ChoixAffichage();
     }
 
     public void ChargementDonnees()

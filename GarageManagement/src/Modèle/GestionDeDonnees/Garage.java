@@ -24,7 +24,8 @@ public class Garage implements InterfaceGarage
 
     public static Garage getGarage()
     {
-        if (instance == null) {
+        if (instance == null)
+        {
             instance = new Garage();
         }
         return instance;
@@ -33,6 +34,11 @@ public class Garage implements InterfaceGarage
     @Override
     public void ajouterVehicule(Vehicule vehicule) throws IOException
     {
+        int dernierId = GestionFichier.getDernierId();
+        int nouvelId = dernierId + 1;
+
+        vehicule.setIdentifiant(nouvelId);
+
         listeVehicules.add(vehicule);
         List<String> lignes = GestionFichier.lireFichier();
         lignes.add(formaterVehicule(vehicule));
@@ -40,51 +46,49 @@ public class Garage implements InterfaceGarage
     }
 
     @Override
-    public void supprimerVehicule(String type, String marque, String modele) throws IOException
+    public void supprimerVehicule(int id) throws IOException
     {
         List<String> lignes = GestionFichier.lireFichier();
         List<String> lignesModifiees = new ArrayList<>();
 
         for (String ligne : lignes) {
             String[] attributs = ligne.split(",");
-            if (attributs.length > 2 && !(attributs[0].equals(type) && attributs[1].equals(marque) && attributs[2].equals(modele))) {
+            if (attributs.length > 0 && Integer.parseInt(attributs[0]) != id) {
                 lignesModifiees.add(ligne);
             }
         }
+
         GestionFichier.ecrireFichier(lignesModifiees);
+        chargerVehicules(); // Met à jour la liste interne après suppression
     }
 
     @Override
-    public void modifierVehicule(String ancienType, String ancienneMarque, String ancienModele, Vehicule vehiculeModifie) throws IOException
+    public void modifierVehicule(int id, Vehicule vehiculeModifie) throws IOException
     {
         List<String> lignes = GestionFichier.lireFichier();
         List<String> lignesModifiees = new ArrayList<>();
 
-        for (String ligne : lignes)
-        {
+        for (String ligne : lignes) {
             String[] attributs = ligne.split(",");
 
-            if (attributs.length > 2 &&
-                    attributs[0].equalsIgnoreCase(ancienType) &&
-                    attributs[1].equalsIgnoreCase(ancienneMarque) &&
-                    attributs[2].equalsIgnoreCase(ancienModele))
+            if (attributs.length > 0 && Integer.parseInt(attributs[0]) == id)
             {
-
                 lignesModifiees.add(formaterVehicule(vehiculeModifie));
-            }
-            else
-            {
-
+            } else {
                 lignesModifiees.add(ligne);
             }
         }
+
         GestionFichier.ecrireFichier(lignesModifiees);
+        chargerVehicules();
     }
+
 
     @Override
     public String formaterVehicule(Vehicule vehicule)
     {
-        return vehicule.getType() + "," +
+        return  vehicule.getIdentifiant() + "," +
+                vehicule.getType() + "," +
                 vehicule.getMarque() + "," +
                 vehicule.getModele() + "," +
                 vehicule.getPuissance() + "," +
@@ -101,7 +105,7 @@ public class Garage implements InterfaceGarage
         listeVehicules = GestionFichier.chargerVehiculesDepuisFichier();
     }
     @Override
-    public Vehicule rechercherVehicule(String type, String marque, String modele)
+    public Vehicule rechercherVehiculeParId(int id)
     {
         try
         {
@@ -114,12 +118,12 @@ public class Garage implements InterfaceGarage
 
         for (Vehicule v : listeVehicules)
         {
-            if (v.getType().equalsIgnoreCase(type) && v.getMarque().equalsIgnoreCase(marque) && v.getModele().equalsIgnoreCase(modele))
+            if (v.getIdentifiant() == id)
             {
-                System.out.println(type + marque + modele);
                 return v;
             }
         }
-        return null;
+        return null; // Si aucun véhicule avec l'ID n'est trouvé
     }
+
 }

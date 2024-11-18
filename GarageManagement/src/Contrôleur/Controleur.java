@@ -88,6 +88,12 @@ public class Controleur implements ActionListener
             garageWindow.Modifier();
         }
 
+        if(actionEvent.getActionCommand().equals(ActionsControleur.AFFICHER))
+        {
+            System.out.println("\nVoir les données du fichier ou de la base de données\n");
+            garageWindow.Afficher();
+        }
+
         if(actionEvent.getActionCommand().equals(ActionsControleur.VOIR))
         {
             System.out.println("\nVoir les informations du véhicule\n");
