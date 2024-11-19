@@ -14,7 +14,6 @@
 14,Moto,Harley Davidson,Low Rider ST,105 ch,Manuelle,États-Unis,2024,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Motos\HarleyLowRider.jpg
 15,Camionnette,Citroën,Jumper,125 ch,Automatique,France,2005,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Camionnettes\citroen_jumper_automocionpere003.jpg
 16,Voiture,Ferrari,488 GTB,670 ch,Automatique,Italie,2015,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\carpixel.net-2015-ferrari-488-gtb-us-71531-hd.jpg
-17,Voiture,Toyota,Corolla,132 ch,Manuelle,Japon,2021,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\68-toyota-corolla-gr-1.jpg
 18,Moto,Yamaha,MT 07,74 ch,Manuelle,Japon,2019,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Motos\IMG_4137-scaled.jpg
 19,Camionnette,Ford,Econoline E150,195 ch,Automatique,États-Unis,1995,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Camionnettes\1995-ford-e150-dmc-conversion-van.jpg
 20,Voiture,Renault,Clio II,79 ch,Manuelle,France,2005,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\S8-Renault-Clio-40181.jpg

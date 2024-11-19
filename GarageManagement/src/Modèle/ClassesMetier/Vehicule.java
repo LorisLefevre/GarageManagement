@@ -29,6 +29,11 @@ public class Vehicule
         this.type = type;
     }
 
+    public Vehicule()
+    {
+
+    }
+
     public Vehicule(int id,String marque, String modele, String puissance, String transmission, String pays, int annee, String image, String type)
     {
         this.identifiant = id;

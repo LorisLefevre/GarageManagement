@@ -81,6 +81,71 @@ public class Requetes
         }
     }
 
+    public void modifierVehicule(int id, Vehicule vehicule) throws SQLException
+    {
+        String sql = "UPDATE " + vehicule.getType() + " SET marque = ?, modele = ?, puissance = ?, " +
+                "transmission = ?, pays = ?, annee = ?, image = ? WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(sql))
+        {
+            statement.setString(1, vehicule.getMarque());
+            statement.setString(2, vehicule.getModele());
+            statement.setString(3, vehicule.getPuissance());
+            statement.setString(4, vehicule.getTransmission());
+            statement.setString(5, vehicule.getPays());
+            statement.setInt(6, vehicule.getAnnee());
+            statement.setString(7, vehicule.getImage());
+            statement.setInt(8, id);
+
+            int rowsUpdated = statement.executeUpdate();
+
+            if (rowsUpdated == 0)
+            {
+                throw new SQLException("Aucun véhicule trouvé avec cet ID.");
+            }
+        }
+        catch (SQLException e)
+        {
+            System.err.println("Erreur lors de la modification du véhicule : " + e.getMessage());
+            throw e;
+        }
+    }
+
+    public Vehicule rechercherVehiculeParId(String typeTable, int id) throws SQLException
+    {
+        String sql = "SELECT * FROM " + typeTable + " WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(sql))
+        {
+
+            statement.setInt(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery())
+            {
+                if (resultSet.next())
+                {
+                    Vehicule vehicule = new Vehicule();
+                    vehicule.setIdentifiant(resultSet.getInt("id"));
+                    vehicule.setType(typeTable);
+                    vehicule.setMarque(resultSet.getString("marque"));
+                    vehicule.setModele(resultSet.getString("modele"));
+                    vehicule.setPuissance(resultSet.getString("puissance"));
+                    vehicule.setTransmission(resultSet.getString("transmission"));
+                    vehicule.setAnnee(resultSet.getInt("annee"));
+                    vehicule.setPays(resultSet.getString("pays"));
+                    vehicule.setImage(resultSet.getString("image"));
+                    return vehicule;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+    }
+
     public List<Vehicule> RecupererVoitures() throws SQLException
     {
         String sql = "SELECT * FROM voiture";

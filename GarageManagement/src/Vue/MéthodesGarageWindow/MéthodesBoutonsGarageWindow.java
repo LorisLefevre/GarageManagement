@@ -80,7 +80,6 @@ public class MéthodesBoutonsGarageWindow
             return;
         }
 
-        // Récupérer l'ID depuis la colonne correspondante
         int id = Integer.parseInt(GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 0).toString());
 
         int confirmation = JOptionPane.showConfirmDialog(
@@ -90,30 +89,36 @@ public class MéthodesBoutonsGarageWindow
                 JOptionPane.YES_NO_OPTION
         );
 
-        if (confirmation == JOptionPane.YES_OPTION) {
-            try {
+        if (confirmation == JOptionPane.YES_OPTION)
+        {
+            try
+            {
                 Garage.getGarage().supprimerVehicule(id);
                 JOptionPane.showMessageDialog(null, "Véhicule supprimé avec succès!", "Succès", JOptionPane.INFORMATION_MESSAGE);
                 MéthodesGarageWindow.getInstance().RechargerTable();
-            } catch (IOException ex) {
+            }
+            catch (IOException ex)
+            {
                 JOptionPane.showMessageDialog(null, "Erreur lors de la suppression du véhicule: " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    public void BoutonModifier() {
+    public void BoutonModifier()
+    {
         int selectedRow = GarageWindow.getGarageWindow().getTable().getSelectedRow();
 
-        if (selectedRow == -1) {
+        if (selectedRow == -1)
+        {
             JOptionPane.showMessageDialog(null, "Veuillez sélectionner un véhicule à modifier.", "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Récupérer l'ID depuis la colonne correspondante
         int id = Integer.parseInt(GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 0).toString());
 
         Vehicule vehicule = Garage.getGarage().rechercherVehiculeParId(id);
-        if (vehicule == null) {
+        if (vehicule == null)
+        {
             JOptionPane.showMessageDialog(null, "Véhicule non trouvé.", "Erreur", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -136,9 +141,12 @@ public class MéthodesBoutonsGarageWindow
             vehicule.setPuissance(((JTextField) panel.getComponent(7)).getText());
             vehicule.setTransmission(((JTextField) panel.getComponent(9)).getText());
 
-            try {
+            try
+            {
                 vehicule.setAnnee(Integer.parseInt(((JTextField) panel.getComponent(11)).getText()));
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e)
+            {
                 JOptionPane.showMessageDialog(null, "Veuillez entrer une année valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -146,11 +154,14 @@ public class MéthodesBoutonsGarageWindow
             vehicule.setPays(((JTextField) panel.getComponent(13)).getText());
             vehicule.setImage(((JTextField) panel.getComponent(15)).getText());
 
-            try {
+            try
+            {
                 Garage.getGarage().modifierVehicule(id, vehicule);
                 JOptionPane.showMessageDialog(null, "Véhicule modifié avec succès!", "Succès", JOptionPane.INFORMATION_MESSAGE);
                 MéthodesGarageWindow.getInstance().RechargerTable();
-            } catch (IOException ex) {
+            }
+            catch (IOException ex)
+            {
                 JOptionPane.showMessageDialog(null, "Erreur lors de la modification du véhicule : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         }

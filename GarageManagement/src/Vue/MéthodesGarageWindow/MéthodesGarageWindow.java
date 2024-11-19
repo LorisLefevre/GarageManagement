@@ -73,7 +73,7 @@ public class MéthodesGarageWindow
 
         for (Object[] row : data)
         {
-            if (type.equals("Tout") || row[0].equals(type))
+            if (type.equals("Tout") || row[1].equals(type))
             {
                 model.addRow(row);
             }
