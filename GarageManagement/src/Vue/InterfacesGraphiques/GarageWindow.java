@@ -5,6 +5,7 @@ import Contrôleur.Controleur;
 import Modèle.GestionDeDonnees.Garage;
 import Vue.MéthodesGarageWindow.ChoixUtilisateur;
 import Vue.MéthodesGarageWindow.MéthodesBoutonsGarageWindow;
+import Vue.MéthodesGarageWindow.MéthodesBoutonsGarageWindowBD;
 import Vue.MéthodesGarageWindow.MéthodesGarageWindow;
 import Vue.Vues.VueGarageWindow;
 
@@ -213,12 +214,20 @@ public class GarageWindow extends JFrame implements VueGarageWindow
 
     public void Afficher()
     {
-        showMessage("Choix du type d'affichage");
+        showMessage("Affichage des véhicules");
         ChoixUtilisateur.getInstance().ChoixAffichage();
+        messageLabel.setText("Affichage des véhicules");
+    }
+
+    public void Voir()
+    {
+        showMessage("Voir le véhicule sélectionné");
+        ChoixUtilisateur.getInstance().ChoixVision();
+        messageLabel.setText("Voici le véhicule en question");
     }
 
     public void ChargementDonnees()
     {
-        MéthodesGarageWindow.getInstance().RechargerTable();
+        Afficher();
     }
 }

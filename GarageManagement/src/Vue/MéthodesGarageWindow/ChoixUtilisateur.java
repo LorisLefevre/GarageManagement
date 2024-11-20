@@ -1,9 +1,17 @@
 package Vue.MéthodesGarageWindow;
 
+import Vue.InterfacesGraphiques.GarageWindow;
+
 import javax.swing.*;
 
 public class ChoixUtilisateur
 {
+    private String modeTravail;
+
+    public String getModeTravail()
+    {
+        return modeTravail;
+    }
     private static ChoixUtilisateur instance;
 
     public static ChoixUtilisateur getInstance()
@@ -16,100 +24,115 @@ public class ChoixUtilisateur
         return instance;
     }
 
-    public void ChoixAjout()
+    public void ChoixMode()
     {
-        JComboBox<String> comboBoxAjout = new JComboBox<>(new String[]{"Fichier.txt", "Base de données"});
-        comboBoxAjout.setSelectedIndex(0); // Option par défaut
-        JOptionPane.showMessageDialog(null, comboBoxAjout, "Choisissez une option pour Ajout", JOptionPane.QUESTION_MESSAGE);
-        String choix = (String) comboBoxAjout.getSelectedItem();
-        System.out.println("Choix pour Ajout : " + choix);
-
-        if ("Fichier.txt".equals(choix))
+        if (modeTravail == null)
         {
-            System.out.println("Ajout dans le fichier texte sélectionné.");
-            MéthodesBoutonsGarageWindow.getInstance().BoutonAjouter();
-        }
-        else if ("Base de données".equals(choix))
-        {
-            System.out.println("Ajout dans la base de données sélectionné.");
-            MéthodesBoutonsGarageWindowBD.getInstance().BoutonAjouterBD();
+            JComboBox<String> comboBoxAjout = new JComboBox<>(new String[]{"Fichier.txt", "Base de données"});
+            comboBoxAjout.setSelectedIndex(0);
+            JOptionPane.showMessageDialog(null, comboBoxAjout, "Choisissez une option pour le choix d'enregistrement", JOptionPane.QUESTION_MESSAGE);
+            modeTravail = (String) comboBoxAjout.getSelectedItem();
+            System.out.println("Mode choisi : " + modeTravail);
         }
         else
         {
-            System.out.println("Aucun choix valide.");
+            System.out.println("Mode déjà sélectionné : " + modeTravail);
+        }
+    }
+
+    public void ChoixAjout()
+    {
+        String mode = ChoixUtilisateur.getInstance().getModeTravail();
+        if(mode.equals("Fichier.txt"))
+        {
+            MéthodesBoutonsGarageWindow.getInstance().BoutonAjouter();
+        }
+
+        else if(mode.equals("Base de données"))
+        {
+            MéthodesBoutonsGarageWindowBD.getInstance().BoutonAjouterBD();
+        }
+
+        else
+        {
+            GarageWindow.getGarageWindow().showMessage("Désolé, mais nous n'avons trouvé aucun moyen pour ajouter un véhicule");
         }
     }
 
     public void ChoixSuppression()
     {
-        JComboBox<String> comboBoxSuppression = new JComboBox<>(new String[]{"Fichier.txt", "Base de données"});
-        comboBoxSuppression.setSelectedIndex(0); // Option par défaut
-        JOptionPane.showMessageDialog(null, comboBoxSuppression, "Choisissez une option pour Suppression", JOptionPane.QUESTION_MESSAGE);
-        String choix = (String) comboBoxSuppression.getSelectedItem();
-        System.out.println("Choix pour Suppression : " + choix);
-
-        if ("Fichier.txt".equals(choix))
+        String mode = ChoixUtilisateur.getInstance().getModeTravail();
+        if(mode.equals("Fichier.txt"))
         {
-            System.out.println("Suppression dans le fichier texte sélectionné.");
             MéthodesBoutonsGarageWindow.getInstance().BoutonSupprimer();
         }
-        else if ("Base de données".equals(choix))
+
+        else if(mode.equals("Base de données"))
         {
-            System.out.println("Suppression dans la base de données sélectionné.");
             MéthodesBoutonsGarageWindowBD.getInstance().BoutonSupprimerBD();
         }
+
         else
         {
-            System.out.println("Aucun choix valide.");
+            GarageWindow.getGarageWindow().showMessage("Désolé, mais nous n'avons trouvé aucun moyen pour supprimer le véhicule");
         }
     }
 
     public void ChoixModification()
     {
-        JComboBox<String> comboBoxModification = new JComboBox<>(new String[]{"Fichier.txt", "Base de données"});
-        comboBoxModification.setSelectedIndex(0); // Option par défaut
-        JOptionPane.showMessageDialog(null, comboBoxModification, "Choisissez une option pour Modification", JOptionPane.QUESTION_MESSAGE);
-        String choix = (String) comboBoxModification.getSelectedItem();
-        System.out.println("Choix pour Modification : " + choix);
-
-        if ("Fichier.txt".equals(choix))
+        String mode = ChoixUtilisateur.getInstance().getModeTravail();
+        if(mode.equals("Fichier.txt"))
         {
-            System.out.println("Modification dans le fichier texte sélectionné.");
             MéthodesBoutonsGarageWindow.getInstance().BoutonModifier();
         }
-        else if ("Base de données".equals(choix))
+
+        else if(mode.equals("Base de données"))
         {
-            System.out.println("Modification dans la base de données sélectionné.");
             MéthodesBoutonsGarageWindowBD.getInstance().BoutonModifierBD();
         }
+
         else
         {
-            System.out.println("Aucun choix valide.");
+            GarageWindow.getGarageWindow().showMessage("Désolé, mais nous n'avons trouvé aucun moyen pour modifier le véhicule");
         }
     }
 
     public void ChoixAffichage()
     {
-        JComboBox<String> comboBoxAffichage = new JComboBox<>(new String[]{"Fichier.txt", "Base de données"});
-        comboBoxAffichage.setSelectedIndex(0); // Option par défaut
-        JOptionPane.showMessageDialog(null, comboBoxAffichage, "Choisissez une option pour Modification", JOptionPane.QUESTION_MESSAGE);
-        String choix = (String) comboBoxAffichage.getSelectedItem();
-        System.out.println("Choix pour Affichage : " + choix);
-
-        if ("Fichier.txt".equals(choix))
+        String mode = ChoixUtilisateur.getInstance().getModeTravail();
+        if(mode.equals("Fichier.txt"))
         {
-            System.out.println("Affichage de données dans le fichier texte sélectionné.");
             MéthodesGarageWindow.getInstance().RechargerTable();
         }
-        else if ("Base de données".equals(choix))
-        {
-            System.out.println("Affichage de données dans la base de données sélectionné.");
-            MéthodesGarageWindow.getInstance().RechargerTableBD();
 
+        else if(mode.equals("Base de données"))
+        {
+            MéthodesGarageWindow.getInstance().RechargerTableBD();
         }
+
         else
         {
-            System.out.println("Aucun choix valide.");
+            GarageWindow.getGarageWindow().showMessage("Désolé, mais nous n'avons trouvé aucun moyen pour afficher les véhicules");
+        }
+    }
+
+    public void ChoixVision()
+    {
+        String mode = ChoixUtilisateur.getInstance().getModeTravail();
+        if(mode.equals("Fichier.txt"))
+        {
+            MéthodesBoutonsGarageWindow.getInstance().BoutonVoir();
+        }
+
+        else if(mode.equals("Base de données"))
+        {
+            //MéthodesBoutonsGarageWindowBD.getInstance().BoutonVoirBD();
+            GarageWindow.getGarageWindow().showMessage("Cette fonctionnalité n'est pas encore disponible. Veuillez réessayer plus tard");
+        }
+
+        else
+        {
+            GarageWindow.getGarageWindow().showMessage("Désolé, mais nous n'avons trouvé aucun moyen pour afficher les véhicules");
         }
     }
 

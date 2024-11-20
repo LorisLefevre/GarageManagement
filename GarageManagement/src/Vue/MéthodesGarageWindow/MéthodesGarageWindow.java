@@ -139,7 +139,7 @@ public class MéthodesGarageWindow
         catch(SQLException e)
         {
             e.printStackTrace();
-            GarageWindow.getGarageWindow().showMessage("Erreur lors de la récupération des sujets : " + e.getMessage());
+            GarageWindow.getGarageWindow().showMessage("Erreur lors de la récupération des véhicule : " + e.getMessage());
         }
 
     }

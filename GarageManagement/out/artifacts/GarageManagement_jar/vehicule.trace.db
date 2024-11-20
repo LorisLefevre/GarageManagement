@@ -1,0 +1,6 @@
+2024-11-19 12:33:08.342243+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VOITURE" not found (this database is empty); SQL statement:
+INSERT INTO Voiture (marque, modele, puissance, transmission, annee, pays, image) VALUES (?, ?, ?, ?, ?, ?, ?) [42104-232]
+2024-11-19 12:33:08.428957+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "VOITURE" not found (this database is empty); SQL statement:
+SELECT * FROM voiture [42104-232]

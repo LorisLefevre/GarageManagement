@@ -10,14 +10,13 @@
 10,Voiture,Nissan,Micra,59 ch,Manuelle,Japon,1990,C:/Users/Loris/IdeaProjects/GarageManagement/Vehicules/Voitures/NissanMicraRouge.jpg
 11,Voiture,Suzuki,Swift,78 ch,Manuelle,Japon,2006,C:/Users/Loris/IdeaProjects/GarageManagement/Vehicules/Voitures/SuzukiSwift.jpg
 12,Camionnette,Peugeot,Boxer,135 ch,Manuelle,France,2020,C:/Users/Loris/IdeaProjects/GarageManagement/Vehicules/Camionnettes/PEUGEOT-BOXER-335261_1 (1).jpg
-13,Voiture,Volvo,S60,370 ch,Automatique,Suède,2016,C:/Users/Loris/IdeaProjects/GarageManagement/Vehicules/Voitures/VolvoS60.jpg
+13,Voiture,Volvo,S60,354 ch,Manuelle,Suède,2016,C:/Users/Loris/IdeaProjects/GarageManagement/Vehicules/Voitures/VolvoS60.jpg
 14,Moto,Harley Davidson,Low Rider ST,105 ch,Manuelle,États-Unis,2024,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Motos\HarleyLowRider.jpg
 15,Camionnette,Citroën,Jumper,125 ch,Automatique,France,2005,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Camionnettes\citroen_jumper_automocionpere003.jpg
 16,Voiture,Ferrari,488 GTB,670 ch,Automatique,Italie,2015,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\carpixel.net-2015-ferrari-488-gtb-us-71531-hd.jpg
 18,Moto,Yamaha,MT 07,74 ch,Manuelle,Japon,2019,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Motos\IMG_4137-scaled.jpg
 19,Camionnette,Ford,Econoline E150,195 ch,Automatique,États-Unis,1995,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Camionnettes\1995-ford-e150-dmc-conversion-van.jpg
 20,Voiture,Renault,Clio II,79 ch,Manuelle,France,2005,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\S8-Renault-Clio-40181.jpg
-21,Voiture,Peugeot,307,134 ch,Manuelle,France,2003,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\Peugeot307.jpg
 22,Voiture,Chevrolet,Corvette,460 ch,Manuelle,États-Unis,1997,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\images.jpg
 23,Voiture,Gillet,Vertigo Streiff,250 ch,Manuelle,Belgique,2002,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\Vertigo-Streiff-031.jpg
 24,Voiture,Citroën,DS3,226 ch,Manuelle,France,2011,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\NEWS_5061_1.jpg
@@ -25,3 +24,4 @@
 26,Voiture,Toyota,GR86,248 ch,Automatique,Japon,2022,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\toyota-gr86-2.jpg
 27,Voiture,Citroën,Xsara,105 ch,Manuelle,France,1999,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\CitroenXsara99.jpg
 28,Voiture,Fiat,Punto,64 ch,Manuelle,Italie,1994,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\Fiat-Punto-Italy-1994.jpg
+29,Voiture,Lamborghini,Huracan,610 ch,Semi-Automatique,Italie,2015,C:\Users\Loris\IdeaProjects\GarageManagement\Vehicules\Voitures\LamborghiniHuracan.jpg

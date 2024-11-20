@@ -4,6 +4,7 @@ import Contrôleur.ActionsControleur;
 import Contrôleur.Controleur;
 import Modèle.Utilisateur.GestionUtilisateurs;
 import Modèle.Utilisateur.Utilisateur;
+import Vue.MéthodesGarageWindow.ChoixUtilisateur;
 import Vue.Vues.VueLoginWindow;
 
 import javax.swing.*;
@@ -134,6 +135,7 @@ public class LoginWindow extends JFrame implements VueLoginWindow
                 this.garageWindow = new GarageWindow();
             }
             this.garageWindow = GarageWindow.getGarageWindow();
+            ChoixUtilisateur.getInstance().ChoixMode();
             garageWindow.ChargementDonnees();
             garageWindow.setUserLabel(Username);
             garageWindow.setVisible(true);

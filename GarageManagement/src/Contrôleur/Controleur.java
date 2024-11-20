@@ -97,6 +97,7 @@ public class Controleur implements ActionListener
         if(actionEvent.getActionCommand().equals(ActionsControleur.VOIR))
         {
             System.out.println("\nVoir les informations du véhicule\n");
+            garageWindow.Voir();
         }
 
         if(actionEvent.getActionCommand().equals(ActionsControleur.TRIER))
