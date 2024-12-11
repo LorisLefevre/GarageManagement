@@ -6,32 +6,43 @@ import javax.swing.*;
 
 public class ChoixUtilisateur
 {
-    private String modeTravail;
+    private ModeTravail modeTravail;
+    private StrategieModeTravail strategieModeTravail;
 
-    public String getModeTravail()
-    {
-        return modeTravail;
-    }
     private static ChoixUtilisateur instance;
+
+    private ChoixUtilisateur()
+    {
+
+    }
 
     public static ChoixUtilisateur getInstance()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = new ChoixUtilisateur();
         }
-
         return instance;
     }
 
+    public ModeTravail getModeTravail()
+    {
+        return modeTravail;
+    }
+
+    public void ResetModeTravail()
+    {
+        modeTravail = null;
+    }
     public void ChoixMode()
     {
         if (modeTravail == null)
         {
-            JComboBox<String> comboBoxAjout = new JComboBox<>(new String[]{"Fichier.txt", "Base de données"});
+            JComboBox<ModeTravail> comboBoxAjout = new JComboBox<>(ModeTravail.values());
             comboBoxAjout.setSelectedIndex(0);
             JOptionPane.showMessageDialog(null, comboBoxAjout, "Choisissez une option pour le choix d'enregistrement", JOptionPane.QUESTION_MESSAGE);
-            modeTravail = (String) comboBoxAjout.getSelectedItem();
+            modeTravail = (ModeTravail) comboBoxAjout.getSelectedItem();
+            setModeStrategy(modeTravail);
             System.out.println("Mode choisi : " + modeTravail);
         }
         else
@@ -40,100 +51,98 @@ public class ChoixUtilisateur
         }
     }
 
+    private void setModeStrategy(ModeTravail modeTravail)
+    {
+        switch (modeTravail)
+        {
+            case FICHIER_TEXTE:
+                strategieModeTravail = new StrategieTravailFichierTexte();
+                GarageWindow.getGarageWindow().getChanger().setText("Fichier Texte");
+                break;
+            case BASE_DE_DONNEES:
+                strategieModeTravail = new StrategieTravailBaseDeDonnees();
+                GarageWindow.getGarageWindow().getChanger().setText("Base De Données");
+                break;
+            default:
+                throw new IllegalArgumentException("Mode de travail non supporté : " + modeTravail);
+        }
+    }
+
     public void ChoixAjout()
     {
-        String mode = ChoixUtilisateur.getInstance().getModeTravail();
-        if(mode.equals("Fichier.txt"))
+        if (strategieModeTravail != null)
         {
-            MéthodesBoutonsGarageWindow.getInstance().BoutonAjouter();
+            strategieModeTravail.Ajouter();
         }
-
-        else if(mode.equals("Base de données"))
-        {
-            MéthodesBoutonsGarageWindowBD.getInstance().BoutonAjouterBD();
-        }
-
         else
         {
-            GarageWindow.getGarageWindow().showMessage("Désolé, mais nous n'avons trouvé aucun moyen pour ajouter un véhicule");
+            afficherErreur();
         }
     }
 
     public void ChoixSuppression()
     {
-        String mode = ChoixUtilisateur.getInstance().getModeTravail();
-        if(mode.equals("Fichier.txt"))
+        if (strategieModeTravail != null)
         {
-            MéthodesBoutonsGarageWindow.getInstance().BoutonSupprimer();
+            strategieModeTravail.Supprimer();
         }
-
-        else if(mode.equals("Base de données"))
-        {
-            MéthodesBoutonsGarageWindowBD.getInstance().BoutonSupprimerBD();
-        }
-
         else
         {
-            GarageWindow.getGarageWindow().showMessage("Désolé, mais nous n'avons trouvé aucun moyen pour supprimer le véhicule");
+            afficherErreur();
         }
     }
 
     public void ChoixModification()
     {
-        String mode = ChoixUtilisateur.getInstance().getModeTravail();
-        if(mode.equals("Fichier.txt"))
+        if (strategieModeTravail != null)
         {
-            MéthodesBoutonsGarageWindow.getInstance().BoutonModifier();
+            strategieModeTravail.Modifier();
         }
-
-        else if(mode.equals("Base de données"))
-        {
-            MéthodesBoutonsGarageWindowBD.getInstance().BoutonModifierBD();
-        }
-
         else
         {
-            GarageWindow.getGarageWindow().showMessage("Désolé, mais nous n'avons trouvé aucun moyen pour modifier le véhicule");
+            afficherErreur();
         }
     }
 
     public void ChoixAffichage()
     {
-        String mode = ChoixUtilisateur.getInstance().getModeTravail();
-        if(mode.equals("Fichier.txt"))
+        if (strategieModeTravail != null)
         {
-            MéthodesGarageWindow.getInstance().RechargerTable();
+            strategieModeTravail.Afficher();
         }
-
-        else if(mode.equals("Base de données"))
-        {
-            MéthodesGarageWindow.getInstance().RechargerTableBD();
-        }
-
         else
         {
-            GarageWindow.getGarageWindow().showMessage("Désolé, mais nous n'avons trouvé aucun moyen pour afficher les véhicules");
+            afficherErreur();
         }
     }
 
     public void ChoixVision()
     {
-        String mode = ChoixUtilisateur.getInstance().getModeTravail();
-        if(mode.equals("Fichier.txt"))
+        if (strategieModeTravail != null)
         {
-            MéthodesBoutonsGarageWindow.getInstance().BoutonVoir();
+            strategieModeTravail.Visionner();
         }
-
-        else if(mode.equals("Base de données"))
-        {
-            //MéthodesBoutonsGarageWindowBD.getInstance().BoutonVoirBD();
-            GarageWindow.getGarageWindow().showMessage("Cette fonctionnalité n'est pas encore disponible. Veuillez réessayer plus tard");
-        }
-
         else
         {
-            GarageWindow.getGarageWindow().showMessage("Désolé, mais nous n'avons trouvé aucun moyen pour afficher les véhicules");
+            afficherErreur();
         }
+    }
+
+    public void ChoixTri()
+    {
+        if (strategieModeTravail != null)
+        {
+            strategieModeTravail.Trier();
+        }
+        else
+        {
+            afficherErreur();
+        }
+    }
+
+    private void afficherErreur()
+    {
+        GarageWindow.getGarageWindow().showMessage("Mode de travail non défini ou invalide !");
     }
 
 }

@@ -19,17 +19,23 @@ public class GestionUtilisateurs
     {
         loadUserData();
 
-        if (utilisateurs.containsKey(username)) {
+        if (utilisateurs.containsKey(username))
+        {
             Utilisateur utilisateur = utilisateurs.get(username);
 
-            if (verifierMotDePasse(password, utilisateur.getMotDePasse(), utilisateur.getSalt())) {
+            if (verifierMotDePasse(password, utilisateur.getMotDePasse(), utilisateur.getSalt()))
+            {
                 System.out.println("Connexion réussie pour " + username);
                 return utilisateur;
-            } else {
+            }
+            else
+            {
                 System.out.println("Mot de passe incorrect pour " + username);
                 return null;
             }
-        } else {
+        }
+        else
+        {
             String salt = genererSalt();
             String motDePasseHash = hasherMotDePasse(password, salt);
             Utilisateur nouvelUtilisateur = new Utilisateur(username, motDePasseHash, salt);

@@ -105,5 +105,11 @@ public class Controleur implements ActionListener
             System.out.println("\nTri de véhicules\n");
             garageWindow.Trier();
         }
+
+        if(actionEvent.getActionCommand().equals(ActionsControleur.CHANGER))
+        {
+            System.out.println("\nChangement de mode de travail\n");
+            garageWindow.Changer();
+        }
     }
 }

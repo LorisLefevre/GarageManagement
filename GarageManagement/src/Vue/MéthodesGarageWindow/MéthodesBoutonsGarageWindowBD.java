@@ -2,12 +2,11 @@ package Vue.MéthodesGarageWindow;
 
 import Modèle.ClassesMetier.Vehicule;
 import Modèle.GestionBaseDeDonnees.Requetes;
-import Modèle.GestionDeDonnees.Garage;
 import Vue.InterfacesGraphiques.FormulaireVehicule;
 import Vue.InterfacesGraphiques.GarageWindow;
+import Vue.InterfacesGraphiques.VehiculeInformationWindow;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.sql.SQLException;
 
 
@@ -57,11 +56,10 @@ public class MéthodesBoutonsGarageWindowBD
                 return;
             }
 
-            Vehicule vehicule = FormulaireVehicule.getInstance().CreerVehiculeDeFormulaire(type, marque, modele, puissance, transmission, annee, pays, imagePath);
 
             Requetes.getInstance().AjouterVehicule(type,marque, modele,puissance, transmission, annee, pays, imagePath);
 
-            MéthodesGarageWindow.getInstance().RechargerTableBD();
+            MéthodesGarageWindow.getInstance().RechargerTableBD("Tout");
         }
     }
 
@@ -76,20 +74,10 @@ public class MéthodesBoutonsGarageWindowBD
         }
 
         int id = Integer.parseInt(GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 0).toString());
-        String type = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 1);
-        String marque = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 2);
-        String modele = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 3);
-        String puissance = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 4);
-        String transmission = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 5);
-        String pays = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 6);
-        int annee = Integer.parseInt((String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 7).toString());
-        String imagePath = "";
 
-        Vehicule vehiculeSupprime = FormulaireVehicule.getInstance().CreerVehiculeDeFormulaire(type, marque, modele, puissance, transmission, annee, pays, imagePath);
+        Requetes.getInstance().SupprimerVehicule(id);
 
-        Requetes.getInstance().SupprimerVehicule(id, type);
-
-        MéthodesGarageWindow.getInstance().RechargerTableBD();
+        MéthodesGarageWindow.getInstance().RechargerTableBD("Tout");
     }
 
     public void BoutonModifierBD()
@@ -103,12 +91,11 @@ public class MéthodesBoutonsGarageWindowBD
         }
 
         int id = Integer.parseInt(GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 0).toString());
-        String type = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 1);
 
         Vehicule vehicule;
         try
         {
-            vehicule = Requetes.getInstance().rechercherVehiculeParId(type, id);
+            vehicule = Requetes.getInstance().rechercherVehiculeParId(id);
             if (vehicule == null)
             {
                 JOptionPane.showMessageDialog(null, "Véhicule non trouvé dans la base de données.", "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -147,7 +134,7 @@ public class MéthodesBoutonsGarageWindowBD
                 Requetes.getInstance().modifierVehicule(id, vehicule);
 
                 JOptionPane.showMessageDialog(null, "Véhicule modifié avec succès!", "Succès", JOptionPane.INFORMATION_MESSAGE);
-                MéthodesGarageWindow.getInstance().RechargerTableBD();
+                MéthodesGarageWindow.getInstance().RechargerTableBD("Tout");
 
             }
             catch (NumberFormatException e)
@@ -159,5 +146,85 @@ public class MéthodesBoutonsGarageWindowBD
                 JOptionPane.showMessageDialog(null, "Erreur lors de la modification du véhicule : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    public void BoutonVoirBD()
+    {
+        int selectedRow = GarageWindow.getGarageWindow().getTable().getSelectedRow();
+
+        if (selectedRow == -1)
+        {
+            JOptionPane.showMessageDialog(null, "Veuillez sélectionner un véhicule à modifier.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int id = Integer.parseInt(GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 0).toString());
+
+        try {
+            // Recherche du véhicule par ID dans la base de données
+            Vehicule vehicule = Requetes.getInstance().rechercherVehiculeParId(id);
+
+            if (vehicule == null)
+            {
+                JOptionPane.showMessageDialog(null, "Véhicule introuvable dans la base de données.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String imagePath = vehicule.getImage();
+            if (imagePath == null || imagePath.isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "Chemin de l'image introuvable ou invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            VehiculeInformationWindow vehiculeInformationWindow = VehiculeInformationWindow.getInstance();
+            vehiculeInformationWindow.setVehiculeDetails(
+                    vehicule.getMarque(),
+                    vehicule.getModele(),
+                    vehicule.getPuissance(),
+                    vehicule.getTransmission(),
+                    vehicule.getPays(),
+                    vehicule.getAnnee(),
+                    imagePath
+            );
+            vehiculeInformationWindow.run();
+
+        }
+        catch (SQLException e)
+        {
+            JOptionPane.showMessageDialog(null, "Erreur lors de la récupération du véhicule : " + e.getMessage(),
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+        catch (RuntimeException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+
+    public void BoutonTrierBD()
+    {
+        String selectedType = (String) GarageWindow.getGarageWindow().getTrier().getSelectedItem();
+        if (selectedType.equals("Tout"))
+        {
+            MéthodesGarageWindow.getInstance().RechargerTableBD("Tout");
+        }
+
+        else
+        {
+            String[] validTypes = {"Voiture", "Moto", "Camionnette", "Camion"};
+
+            for (String type : validTypes)
+            {
+                if (selectedType.equals(type))
+                {
+                    MéthodesGarageWindow.getInstance().RechargerTableBD(selectedType);
+                    return;
+                }
+            }
+        }
+        //MéthodesGarageWindow.getInstance().RechargerTableBD(selectedType.equals("Tout") ? null : selectedType);
     }
 }

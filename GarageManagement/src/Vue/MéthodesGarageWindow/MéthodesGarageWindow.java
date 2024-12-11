@@ -85,7 +85,7 @@ public class MéthodesGarageWindow
         try
         {
             BufferedImage img = ImageIO.read(new File(path));
-            Image scaledImage = img.getScaledInstance(200, 60, Image.SCALE_SMOOTH); // Redimensionner l'image
+            Image scaledImage = img.getScaledInstance(200, 60, Image.SCALE_SMOOTH);
             return new ImageIcon(scaledImage);
         }
         catch (Exception e)
@@ -108,17 +108,26 @@ public class MéthodesGarageWindow
         model.fireTableDataChanged();
     }
 
-    public void RechargerTableBD()
+    public void RechargerTableBD(String type)
     {
         try
         {
-            List<Vehicule> voitures = Requetes.getInstance().RecupererVoitures();
+            List<Vehicule> vehicules;
+
+            if (type == null || type.equals("Tout"))
+            {
+                vehicules = Requetes.getInstance().RecupererVehicules();
+            }
+            else
+            {
+                vehicules = Requetes.getInstance().RecupererVehiculesParType(type);
+            }
 
             GarageWindow.getGarageWindow().getData().clear();
 
             GarageWindow.getGarageWindow().getModel().setRowCount(0);
 
-            for(Vehicule vehicule : voitures)
+            for(Vehicule vehicule : vehicules)
             {
                 GarageWindow.getGarageWindow().getModel().addRow(new Object[]{
                         vehicule.getIdentifiant(),
@@ -131,9 +140,7 @@ public class MéthodesGarageWindow
                         vehicule.getAnnee(),
                         vehicule.getImage()
                 });
-
             }
-
         }
 
         catch(SQLException e)
@@ -143,6 +150,4 @@ public class MéthodesGarageWindow
         }
 
     }
-
-
 }

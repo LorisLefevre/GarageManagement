@@ -179,38 +179,49 @@ public class MéthodesBoutonsGarageWindow
         }
 
         int id = Integer.parseInt(GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 0).toString());
-        String marque = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 2);
-        String modele = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 3);
-        String puissance = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 4);
-        String transmission = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 5);
-        String pays = (String) GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 6);
-        int annee = Integer.parseInt(GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 7).toString());
-        Object value = GarageWindow.getGarageWindow().getTable().getValueAt(selectedRow, 8).toString();
-        String imagePath = null;
-        if (value instanceof ImageIcon)
-        {
-            ImageIcon icon = (ImageIcon) value;
-            imagePath = icon.getDescription(); // Récupère la description si elle est définie
-        }
-        else if (value instanceof String)
-        {
-            imagePath = (String) value; // Si la colonne contient une chaîne, cela fonctionne
-        }
-        else
-        {
-            System.out.println("Valeur inattendue dans la colonne 8 : " + value);
-        }
 
+        try
+        {
+            Vehicule vehicule = Garage.getGarage().rechercherVehiculeParId(id);
 
-        VehiculeInformationWindow vehiculeInformationWindow = VehiculeInformationWindow.getInstance();
-        vehiculeInformationWindow.setVehiculeDetails(marque, modele, puissance, transmission, pays, annee, imagePath);
-        vehiculeInformationWindow.run();
+            if (vehicule == null)
+            {
+                JOptionPane.showMessageDialog(null, "Véhicule introuvable dans les fichiers.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
+            String imagePath = vehicule.getImage();
+            if (imagePath == null || imagePath.isEmpty())
+            {
+                JOptionPane.showMessageDialog(null, "Chemin de l'image introuvable ou invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            VehiculeInformationWindow vehiculeInformationWindow = VehiculeInformationWindow.getInstance();
+            vehiculeInformationWindow.setVehiculeDetails(
+                    vehicule.getMarque(),
+                    vehicule.getModele(),
+                    vehicule.getPuissance(),
+                    vehicule.getTransmission(),
+                    vehicule.getPays(),
+                    vehicule.getAnnee(),
+                    imagePath
+            );
+            vehiculeInformationWindow.run();
+
+        }
+        catch (RuntimeException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }
+
 
     public void BoutonTrier()
     {
         String selectedType = (String) GarageWindow.getGarageWindow().getTrier().getSelectedItem();
+        System.out.println(selectedType);
         MéthodesGarageWindow.getInstance().filterTableByType(selectedType);
     }
 }

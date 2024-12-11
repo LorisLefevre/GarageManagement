@@ -68,18 +68,6 @@ public class FormulaireVehicule
     public Vehicule CreerVehiculeDeFormulaire(String type, String marque, String modele, String puissance,
                                               String transmission, int annee, String pays, String imagePath)
     {
-        switch (type)
-        {
-            case "Voiture":
-                return new Voiture(marque, modele, puissance, transmission, pays, annee, imagePath);
-            case "Moto":
-                return new Moto(marque, modele, puissance, transmission, pays, annee, imagePath);
-            case "Camionnette":
-                return new Camionnette(marque, modele, puissance, transmission, pays, annee, imagePath);
-            case "Camion":
-                return new Camion(marque, modele, puissance, transmission, pays, annee, imagePath);
-            default:
-                throw new IllegalArgumentException("Type de véhicule non supporté: " + type);
-        }
+        return VehiculeFactory.creerVehicule(type, marque, modele, puissance, transmission, pays,annee, imagePath);
     }
 }

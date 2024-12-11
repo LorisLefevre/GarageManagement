@@ -58,7 +58,8 @@ public class GestionFichier
         List<Vehicule> listeVehicules = new ArrayList<>();
         List<String> lignes = lireFichier();
 
-        for (String ligne : lignes) {
+        for (String ligne : lignes)
+        {
             String[] attributs = ligne.split(",");
             if (attributs.length == 9)
             {
@@ -72,27 +73,13 @@ public class GestionFichier
                 int annee = Integer.parseInt(attributs[7]);
                 String image = attributs[8];
 
-                Vehicule vehicule;
-                switch (type)
-                {
-                    case "Voiture":
-                        vehicule = new Voiture(id, marque, modele, puissance, transmission, pays, annee, image);
-                        break;
-                    case "Moto":
-                        vehicule = new Moto(id, marque, modele, puissance, transmission, pays, annee, image);
-                        break;
-                    case "Camionnette":
-                        vehicule = new Camionnette(id,marque, modele, puissance, transmission, pays, annee, image);
-                        break;
-                    case "Camion":
-                        vehicule = new Camion(id, marque, modele, puissance, transmission, pays, annee, image);
-                        break;
-                    default:
-                        System.out.println("Type de véhicule inconnu: " + type);
-                        continue;
-                }
+                Vehicule vehicule = VehiculeFactory.creerVehicule(id, type, marque, modele, puissance,
+                        transmission, pays, annee, image);
 
-                listeVehicules.add(vehicule);
+                if (vehicule != null)
+                {
+                    listeVehicules.add(vehicule);
+                }
             }
         }
         return listeVehicules;
@@ -103,16 +90,15 @@ public class GestionFichier
         int dernierId = 0;
 
         List<String> lignes = lireFichier();
-        for (String ligne : lignes) {
+        for (String ligne : lignes)
+        {
             String[] attributs = ligne.split(",");
-            if (attributs.length > 0) {
-                int id = Integer.parseInt(attributs[0]); // Le premier champ est l'ID
+            if (attributs.length > 0)
+            {
+                int id = Integer.parseInt(attributs[0]);
                 dernierId = Math.max(dernierId, id);
             }
         }
         return dernierId;
     }
-
-
-
 }

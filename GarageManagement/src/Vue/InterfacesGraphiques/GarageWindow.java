@@ -5,8 +5,6 @@ import Contrôleur.Controleur;
 import Modèle.GestionDeDonnees.Garage;
 import Vue.MéthodesGarageWindow.ChoixUtilisateur;
 import Vue.MéthodesGarageWindow.MéthodesBoutonsGarageWindow;
-import Vue.MéthodesGarageWindow.MéthodesBoutonsGarageWindowBD;
-import Vue.MéthodesGarageWindow.MéthodesGarageWindow;
 import Vue.Vues.VueGarageWindow;
 
 import javax.swing.*;
@@ -15,30 +13,32 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-public class GarageWindow extends JFrame implements VueGarageWindow
+public class GarageWindow extends JFrame implements VueGarageWindow, Observer
 {
-    private DefaultTableModel model;
+    private final DefaultTableModel model;
 
     public DefaultTableModel getModel()
     {
         return model;
     }
-    private List<Object[]> data;
+    private final List<Object[]> data;
 
     public List<Object[]> getData()
     {
         return data;
     }
 
-    private JTable table;
+    private final JTable table;
 
     public JTable getTable()
     {
         return table;
     }
 
-    private JLabel userLabel;
+    private final JLabel userLabel;
 
     public JLabel getUserLabel()
     {
@@ -50,7 +50,7 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         userLabel.setText("Utilisateur : " + user);
     }
 
-    private JLabel messageLabel;
+    private final JLabel messageLabel;
 
     public JLabel getMessageLabel()
     {
@@ -74,14 +74,19 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         return instance;
     }
 
-    private JButton Ajouter;
-    private JButton Modifier;
-    private JButton Supprimer;
+    private final JButton Ajouter;
+    private final JButton Modifier;
+    private final JButton Supprimer;
+    private final JButton Afficher;
+    private final JButton Voir;
+    private final JButton Changer;
 
-    private JButton Afficher;
-    private JButton Voir;
+    public JButton getChanger()
+    {
+        return Changer;
+    }
 
-    private JComboBox<String> Trier;
+    private final JComboBox<String> Trier;
     public JComboBox<String> getTrier()
     {
         return Trier;
@@ -107,13 +112,15 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         Supprimer = new JButton("Supprimer");
         Afficher = new JButton("Afficher");
         Voir = new JButton("Voir");
+        Changer = new JButton("Changer");
         Trier = new JComboBox<>(new String[]{"Tout", "Voiture", "Moto", "Camionnette", "Camion"});
 
         topPanel.add(Ajouter);
         topPanel.add(Modifier);
         topPanel.add(Supprimer);
-        topPanel.add(Afficher);
+        //topPanel.add(Afficher);
         topPanel.add(Voir);
+        topPanel.add(Changer);
         topPanel.add(new JLabel("Trier par : "));
         topPanel.add(Trier);
 
@@ -176,6 +183,7 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         Supprimer.setActionCommand(ActionsControleur.SUPPRIMER);
         Afficher.setActionCommand(ActionsControleur.AFFICHER);
         Voir.setActionCommand(ActionsControleur.VOIR);
+        Changer.setActionCommand(ActionsControleur.CHANGER);
         Trier.setActionCommand(ActionsControleur.TRIER);
 
         Ajouter.addActionListener(controleur);
@@ -183,50 +191,59 @@ public class GarageWindow extends JFrame implements VueGarageWindow
         Supprimer.addActionListener(controleur);
         Afficher.addActionListener(controleur);
         Voir.addActionListener(controleur);
+        Changer.addActionListener(controleur);
         Trier.addActionListener(controleur);
     }
 
     public void Ajouter()
     {
-        showMessage("Ajout de véhicule");
         ChoixUtilisateur.getInstance().ChoixAjout();
         messageLabel.setText("Véhicule ajouté");
     }
 
     public void Supprimer()
     {
-        showMessage("Suppression du véhicule");
         ChoixUtilisateur.getInstance().ChoixSuppression();
         messageLabel.setText("Véhicule supprimé");
     }
 
     public void Modifier()
     {
-        showMessage("Modification d'un véhicule");
         ChoixUtilisateur.getInstance().ChoixModification();
         messageLabel.setText("Véhicule modifié");
     }
     public void Trier()
     {
-        MéthodesBoutonsGarageWindow.getInstance().BoutonTrier();
+        ChoixUtilisateur.getInstance().ChoixTri();
         messageLabel.setText("Tri effectué");
     }
 
     public void Afficher()
     {
-        showMessage("Affichage des véhicules");
         ChoixUtilisateur.getInstance().ChoixAffichage();
         messageLabel.setText("Affichage des véhicules");
     }
 
     public void Voir()
     {
-        showMessage("Voir le véhicule sélectionné");
         ChoixUtilisateur.getInstance().ChoixVision();
         messageLabel.setText("Voici le véhicule en question");
     }
 
+    public void Changer()
+    {
+        ChoixUtilisateur.getInstance().ResetModeTravail();
+        ChoixUtilisateur.getInstance().ChoixMode();
+        Afficher();
+    }
+
     public void ChargementDonnees()
+    {
+        Afficher();
+    }
+
+    @Override
+    public void update(Observable o, Object arg)
     {
         Afficher();
     }

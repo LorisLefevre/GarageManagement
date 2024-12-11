@@ -5,7 +5,7 @@ import Modèle.GestionDeDonnees.InterfaceGarage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class Garage implements InterfaceGarage
 {
@@ -59,7 +59,7 @@ public class Garage implements InterfaceGarage
         }
 
         GestionFichier.ecrireFichier(lignesModifiees);
-        chargerVehicules(); // Met à jour la liste interne après suppression
+        chargerVehicules();
     }
 
     @Override
@@ -123,7 +123,7 @@ public class Garage implements InterfaceGarage
                 return v;
             }
         }
-        return null; // Si aucun véhicule avec l'ID n'est trouvé
+        return null;
     }
 
 }

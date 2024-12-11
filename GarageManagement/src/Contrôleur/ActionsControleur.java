@@ -10,4 +10,5 @@ public abstract class ActionsControleur
     public static final String AFFICHER = "afficher";
     public static final String VOIR = "voir";
     public static final String TRIER = "trier";
+    public static final String CHANGER = "changer";
 }

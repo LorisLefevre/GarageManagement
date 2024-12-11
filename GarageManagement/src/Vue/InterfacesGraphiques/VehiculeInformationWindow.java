@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URL;
 import javax.imageio.ImageIO;
 
 public class VehiculeInformationWindow extends JFrame
@@ -117,12 +118,11 @@ public class VehiculeInformationWindow extends JFrame
     }
 
     public VehiculeInformationWindow() {
-        super("Voir les informations du véhicule");
+        super("Fenêtre d'information du véhicule");
         setSize(800, 800);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Panneau des détails (en haut)
         JPanel detailsPanel = new JPanel(new GridLayout(3, 2, 10, 10));
         detailsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -140,7 +140,6 @@ public class VehiculeInformationWindow extends JFrame
         detailsPanel.add(pays);
         detailsPanel.add(annee);
 
-        // Panneau de l'image (en bas)
         imagePanel = new JPanel(new BorderLayout());
         imagePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         image = new JLabel("", SwingConstants.CENTER);
@@ -148,11 +147,10 @@ public class VehiculeInformationWindow extends JFrame
         image.setBackground(Color.LIGHT_GRAY); // Fond gris pour l'absence d'image
         imagePanel.add(image, BorderLayout.CENTER);
 
-        // Utilisation d'un JSplitPane pour diviser verticalement
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, detailsPanel, imagePanel);
-        splitPane.setDividerLocation(100); // Hauteur initiale du panneau supérieur
-        splitPane.setResizeWeight(0.3);    // Poids du panneau supérieur
-        splitPane.setOneTouchExpandable(true); // Permet de réajuster avec un bouton
+        splitPane.setDividerLocation(100);
+        splitPane.setResizeWeight(0.3);
+        splitPane.setOneTouchExpandable(true);
         splitPane.setContinuousLayout(true);
 
         add(splitPane, BorderLayout.CENTER);
@@ -169,17 +167,40 @@ public class VehiculeInformationWindow extends JFrame
         this.pays.setText("Pays : " + pays);
         this.annee.setText("Année : " + annee);
 
-        // Charger et afficher l'image
         try
         {
-            BufferedImage image = ImageIO.read(new File(imagePath));
-            ImageIcon icon = new ImageIcon(image.getScaledInstance(600, 300, Image.SCALE_SMOOTH));
-            this.image.setIcon(icon);
+            BufferedImage image = null;
+
+            if (imagePath.startsWith("http") || imagePath.startsWith("file:/"))
+            {
+                image = ImageIO.read(new URL(imagePath));
+            }
+            else
+            {
+                // Charge l'image depuis un fichier local ou une ressource
+                image = ImageIO.read(new File(imagePath)); // Pour les chemins locaux
+                // ou depuis les ressources du projet
+                if (image == null) {
+                    image = ImageIO.read(getClass().getResourceAsStream(imagePath));
+                }
+            }
+
+            if (image != null)
+            {
+                ImageIcon icon = new ImageIcon(image.getScaledInstance(600, 300, Image.SCALE_SMOOTH));
+                this.image.setIcon(icon);
+                this.image.setText("");
+            }
+            else
+            {
+                throw new IllegalArgumentException("Image introuvable ou nulle.");
+            }
         }
         catch (Exception e)
         {
-            this.image.setText("Image introuvable");
+            this.image.setText("Image introuvable ou invalide");
             this.image.setIcon(null);
+            e.printStackTrace(); // Affiche les détails de l'erreur pour le débogage
         }
     }
 
@@ -189,12 +210,4 @@ public class VehiculeInformationWindow extends JFrame
         this.setVisible(true);
     }
 
-    public static void main(String[] args)
-    {
-        VehiculeInformationWindow vehiculeInformationWindow = new VehiculeInformationWindow();
-
-        vehiculeInformationWindow.setVehiculeDetails("Nissan", "Micra", "78 ch", "Manuelle", "Japon", 1990, "C:/Users/Loris/IdeaProjects/GarageManagement/Vehicules/Voitures/NissanMicraRouge.jpg");
-
-        vehiculeInformationWindow.setVisible(true);
-    }
 }
