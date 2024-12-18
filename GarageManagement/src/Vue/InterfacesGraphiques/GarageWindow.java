@@ -1,10 +1,8 @@
 package Vue.InterfacesGraphiques;
 
-import Contrôleur.ActionsControleur;
-import Contrôleur.Controleur;
-import Modèle.GestionDeDonnees.Garage;
-import Vue.MéthodesGarageWindow.ChoixUtilisateur;
-import Vue.MéthodesGarageWindow.MéthodesBoutonsGarageWindow;
+import Controleur.ActionsControleur;
+import Controleur.Controleur;
+import Vue.MethodesGarageWindow.ChoixUtilisateur;
 import Vue.Vues.VueGarageWindow;
 
 import javax.swing.*;
@@ -13,10 +11,9 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
-public class GarageWindow extends JFrame implements VueGarageWindow, Observer
+
+public class GarageWindow extends JFrame implements VueGarageWindow
 {
     private final DefaultTableModel model;
 
@@ -40,30 +37,12 @@ public class GarageWindow extends JFrame implements VueGarageWindow, Observer
 
     private final JLabel userLabel;
 
-    public JLabel getUserLabel()
-    {
-        return  userLabel;
-    }
-
     public void setUserLabel(String user)
     {
         userLabel.setText("Utilisateur : " + user);
     }
 
     private final JLabel messageLabel;
-
-    public JLabel getMessageLabel()
-    {
-        return messageLabel;
-    }
-
-    public void setMessageLabel(String message)
-    {
-        messageLabel.setText("");
-    }
-
-    private LoginWindow loginWindow;
-    private Garage garage;
     private static GarageWindow instance;
     public static GarageWindow getGarageWindow()
     {
@@ -73,6 +52,12 @@ public class GarageWindow extends JFrame implements VueGarageWindow, Observer
         }
         return instance;
     }
+
+    public static void resetGarageWindow()
+    {
+        instance = null;
+    }
+
 
     private final JButton Ajouter;
     private final JButton Modifier;
@@ -126,7 +111,7 @@ public class GarageWindow extends JFrame implements VueGarageWindow, Observer
 
         add(topPanel, BorderLayout.NORTH);
 
-        String[] columnNames = {"Id", "Type", "Marque", "Modèle", "Puissance", "Transmission", "Pays", "Année", "Image"};
+        String[] columnNames = {"Id", "Type", "Marque", "Modele", "Puissance", "Transmission", "Pays", "Année", "Image"};
         model = new DefaultTableModel(columnNames, 0);
 
         table = new JTable(model);
@@ -137,7 +122,7 @@ public class GarageWindow extends JFrame implements VueGarageWindow, Observer
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel bottomPanel = new JPanel(new BorderLayout());
-        messageLabel = new JLabel("Bonjour " + userLabel.getText());
+        messageLabel = new JLabel("");
         messageLabel.setFont(new Font("Arial", Font.ITALIC, 12));
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         bottomPanel.add(messageLabel, BorderLayout.CENTER);
@@ -176,7 +161,7 @@ public class GarageWindow extends JFrame implements VueGarageWindow, Observer
         this.setVisible(true);
     }
     @Override
-    public void setContrôleur(Controleur controleur)
+    public void setControleur(Controleur controleur)
     {
         Ajouter.setActionCommand(ActionsControleur.AJOUTER);
         Modifier.setActionCommand(ActionsControleur.MODIFIER);
@@ -221,6 +206,7 @@ public class GarageWindow extends JFrame implements VueGarageWindow, Observer
     public void Afficher()
     {
         ChoixUtilisateur.getInstance().ChoixAffichage();
+        VehiculeInformationWindow.getInstance().setVisible(false);
         messageLabel.setText("Affichage des véhicules");
     }
 
@@ -242,9 +228,4 @@ public class GarageWindow extends JFrame implements VueGarageWindow, Observer
         Afficher();
     }
 
-    @Override
-    public void update(Observable o, Object arg)
-    {
-        Afficher();
-    }
 }

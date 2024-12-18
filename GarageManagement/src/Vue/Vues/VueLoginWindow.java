@@ -1,12 +1,12 @@
 package Vue.Vues;
 
-import Contrôleur.Controleur;
-import Modèle.Utilisateur.GestionUtilisateurs;
+import Controleur.Controleur;
+
 
 public interface VueLoginWindow
 {
     void run();
-    void setContrôleur(Controleur contrôleur);
-    GestionUtilisateurs Login();
+    void setControleur(Controleur controleur);
+    void Login();
     void Logout();
 }

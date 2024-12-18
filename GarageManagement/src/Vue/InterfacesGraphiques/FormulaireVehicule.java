@@ -1,6 +1,6 @@
 package Vue.InterfacesGraphiques;
 
-import Modèle.ClassesMetier.*;
+import Modele.ClassesMetier.*;
 
 import javax.swing.*;
 import java.io.File;

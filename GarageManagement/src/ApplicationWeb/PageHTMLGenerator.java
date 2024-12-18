@@ -1,16 +1,20 @@
 package ApplicationWeb;
 
-import Modèle.ClassesMetier.Vehicule;
+import Modele.ClassesMetier.Vehicule;
+
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import static Modèle.GestionDeDonnees.GestionFichier.chargerVehiculesDepuisFichier;
+import static Modele.GestionDeDonnees.GestionFichier.chargerVehiculesDepuisFichier;
 
 public class PageHTMLGenerator
 {
+    private static final Logger logger = Logger.getLogger(PageHTMLGenerator.class.getName());
     public void genererPageHTML() throws IOException
     {
         // Charger la liste des véhicules en appelant votre méthode existante
@@ -57,7 +61,7 @@ public class PageHTMLGenerator
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "La page HTML n'a pas pu être créée");
         }
     }
 }

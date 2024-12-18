@@ -1,5 +1,5 @@
-import Contrôleur.Controleur;
-import Modèle.GestionDeDonnees.Garage;
+import Controleur.Controleur;
+import Modele.GestionDeDonnees.Garage;
 import Vue.InterfacesGraphiques.LoginWindow;
 
 public class Main

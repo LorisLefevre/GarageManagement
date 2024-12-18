@@ -1,14 +1,21 @@
 package Vue.InterfacesGraphiques;
 
+import Vue.MethodesGarageWindow.MethodesGarageWindow;
+import Vue.Vues.VueVehicleInformationWindow;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
-public class VehiculeInformationWindow extends JFrame
+public class VehiculeInformationWindow extends JFrame implements VueVehicleInformationWindow
 {
+    private static final Logger logger = Logger.getLogger(MethodesGarageWindow.class.getName());
     private static VehiculeInformationWindow instance;
 
     public static VehiculeInformationWindow getInstance()
@@ -19,6 +26,11 @@ public class VehiculeInformationWindow extends JFrame
         }
 
         return instance;
+    }
+
+    public static void resetInstance()
+    {
+        instance = null;
     }
 
     private JLabel marque;
@@ -105,21 +117,11 @@ public class VehiculeInformationWindow extends JFrame
         this.image = image;
     }
 
-    private JPanel imagePanel;
 
-    public JPanel getImagePanel()
+    public VehiculeInformationWindow()
     {
-        return imagePanel;
-    }
-
-    public void setImagePanel(JPanel imagePanel)
-    {
-        this.imagePanel = imagePanel;
-    }
-
-    public VehiculeInformationWindow() {
-        super("Fenêtre d'information du véhicule");
-        setSize(800, 800);
+        super("Fenêtre d'informations du véhicule");
+        setSize(600, 450);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -140,7 +142,7 @@ public class VehiculeInformationWindow extends JFrame
         detailsPanel.add(pays);
         detailsPanel.add(annee);
 
-        imagePanel = new JPanel(new BorderLayout());
+        JPanel imagePanel = new JPanel(new BorderLayout());
         imagePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         image = new JLabel("", SwingConstants.CENTER);
         image.setOpaque(true);
@@ -169,7 +171,7 @@ public class VehiculeInformationWindow extends JFrame
 
         try
         {
-            BufferedImage image = null;
+            BufferedImage image;
 
             if (imagePath.startsWith("http") || imagePath.startsWith("file:/"))
             {
@@ -177,11 +179,10 @@ public class VehiculeInformationWindow extends JFrame
             }
             else
             {
-                // Charge l'image depuis un fichier local ou une ressource
-                image = ImageIO.read(new File(imagePath)); // Pour les chemins locaux
-                // ou depuis les ressources du projet
-                if (image == null) {
-                    image = ImageIO.read(getClass().getResourceAsStream(imagePath));
+                image = ImageIO.read(new File(imagePath));
+                if (image == null)
+                {
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
                 }
             }
 
@@ -200,13 +201,14 @@ public class VehiculeInformationWindow extends JFrame
         {
             this.image.setText("Image introuvable ou invalide");
             this.image.setIcon(null);
-            e.printStackTrace(); // Affiche les détails de l'erreur pour le débogage
+            logger.log(Level.SEVERE, "Les véhicules n'ont pas pu être récupérés");
         }
     }
 
+    @Override
     public void run()
     {
-        this.getInstance();
+        getInstance();
         this.setVisible(true);
     }
 
